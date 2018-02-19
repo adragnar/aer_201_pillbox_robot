@@ -62,133 +62,31 @@ void read_time(char* a);
 char find_operation_time(char* initial, char* final);  
 char rtc_test(char* initial, char* final); //to execute test, run with start & final time arrays below setup_main-screen
 
-//Internal Data Structures
+//actuator_control_functions
+void solenoid_control(char solen_name, char curr_state, char on_off);
+
+//I/O Pin Enums 
+enum latx_types {A,B,C,D,SOLENOID};
+enum sol_types {SOL_TIME=1, SOL_TUBE_SWITCH=2, SOL_CLOSE_BOX=4};
+void assign_to_latx(char latx, char pin_to_write);
+
+
+
+//Internal Data Structure Functions 
 void populate_master_list (char master_list[14][3], char* prescrip_list, char daily, char weekly);
 void reverse_master_list(char master_list[14][3]);
 
 //Tests
 void test_populate_master_list(void);
 void test_reverse_master_list(void);
+void test_solenoid_control(void);
 
-void main(void){
-    
-    // <editor-fold defaultstate="collapsed" desc="Machine Configuration">
-    /********************************* PIN I/O ********************************/
-    /* Write outputs to LATx, read inputs from PORTx. Here, all latches (LATx)
-     * are being cleared (set low) to ensure a controlled start-up state. */  
-    LATA = 0x00;
-    LATB = 0x00; 
-    LATC = 0x00;
-    LATD = 0x00;
-    LATE = 0x00;
-
-    /* After the states of LATx are known, the data direction registers, TRISx
-     * are configured. 0 --> output; 1 --> input. Default is  1. */
-    TRISA = 0xFF; // All inputs (this is the default, but is explicated here for learning purposes)
-    TRISB = 0xFF;
-    TRISC = 0x00;
-    TRISD = 0x00; // All output mode on port D for the LCD
-    TRISE = 0x00;
-    
-    /************************** A/D Converter Module **************************/
-    ADCON0 = 0x00;  // Disable ADC
-    ADCON1 = 0b00001111; // Set all A/D ports to digital (pg. 222)
-    // </editor-fold>
-    
-    INT1IE = 1; // Enable RB1 (keypad data available) interrupt
-    ei(); // Enable all interrupts
-    ////
-    
-    ////
-    setup_main_screen(); 
-    while( current < 6) {
-        switch(current) {
-            case 0 :
-                while(current == 0) {}  //Do nothing until external interrupt changes current
-                break;
-            
-            case 1 :
-                setup_dosage_screen(r_screen_base, prescription); 
-                while(current == 1) {}  //Do nothing until external interrupt changes current
-                break;   
-            
-            case 2 :
-                setup_dosage_screen(r_screen_base, prescription); 
-                while(current == 2) {}  //Do nothing until external interrupt changes current
-                break;  
-            
-            case 3 :
-                setup_dosage_screen(r_screen_base, prescription); 
-                while(current == 3) {}  //Do nothing until external interrupt changes current
-                break;
-            
-            case 4 :
-                setup_daily_repeat_screen(daily_repeat); 
-                while(current == 4) {}  //Do nothing until external interrupt changes current
-                break;
-            
-            case 5 :
-                setup_weekly_repeat_screen(weekly_repeat); 
-                while(current == 5) {}  //Do nothing until external interrupt changes current
-                break;   
-            
-            default :
-                break;
-                
-        }
+void assign_to_latx(char latx, char pin_to_write) {
+    switch (latx) {
+        case SOLENOID : 
+            LATE = pin_to_write;
     }
-    standby_screen(); 
-    
-    //Read from RTC 
-    I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock  
-    di(); // Disable all interrupts  
-    read_time(start_time_array);
-    //while (1){}  //execute program operations of actual microcontroller 
-    __delay_ms(2000);
-    read_time(final_time_array);
-    ei(); //enable all interrupts
-    /////////////////////////////////
-
-    current = 7;
-    while (1) {  // while loop to run final UI 
-        switch(current) {
-        case 7:   //initial done screen
-            setup_end_screen();
-            while (current == 7){}
-            break;
-            
-        case 8: //present all additional info
-            while (current == 8) {
-                cycle_through_options();
-            }
-            printf("hello");
-            break;
-            
-        case 9: 
-            setup_final_time_elapsed_screen(start_time_array, final_time_array);
-            while (current == 9){}
-            current = 7;
-            break;
-            
-        case 10: //info screen: leftover pills
-            setup_pills_remaining_screen(leftover_pills);
-            while (current == 10){}
-            current = 7;
-            break;
-        
-        case 11:   //info screen: prescription information
-            while (current == 11){
-                setup_run_summary_screen(prescription, daily_repeat, weekly_repeat);
-            }
-            current = 7;
-            break;
-        
-        default: 
-            break;
-        }     
-    }
-    }  
-
+}
 
 void interrupt interruptHandler(void){
     /* This function is mapped to the interrupt vector, and so is called when
@@ -608,9 +506,8 @@ void read_time(char* a) {  //read the RTC to find out what time it is
     a[0] = time[0];
     a[1] = time[1];
     a[2] = time[2];
-  
-}  
- 
+}
+
 char find_operation_time(char* initial, char* final) {  
     char elapsed_time_list[2];  
     elapsed_time_list[0] = final[0] - initial[0];  
@@ -619,3 +516,150 @@ char find_operation_time(char* initial, char* final) {
     char elapsed_time = 60*elapsed_time_list[1] + elapsed_time_list[0];  
     return elapsed_time;  
 }  
+
+//Actuator Control Functions 
+void solenoid_control(char solen_name, char curr_state, char on_off) {  //note: on_off only 0,1
+    if (on_off == 1) {  //check to see whether to turn off or not
+        on_off = on_off >> (solen_name-1); //on+off is all 0s except 1 in pin position we want on
+        //printf("%d",on_off);
+    }
+    else{
+        on_off = 0;
+    }
+    curr_state = curr_state & ~solen_name;
+    char final = on_off | curr_state; 
+    assign_to_latx(SOLENOID, final);
+    
+}
+
+void test_solenoid_control(void) {
+    __lcd_clear();
+    __lcd_home();
+    
+    LATE = 0XFF;
+    while (1) {
+        solenoid_control(SOL_TIME, PORTE, 0); 
+        __delay_ms(1000); 
+        solenoid_control(SOL_TIME, PORTE, 1);
+        __delay_ms(1000);
+    }
+}
+
+
+void main(void){
+    
+    // <editor-fold defaultstate="collapsed" desc="Machine Configuration">
+    /********************************* PIN I/O ********************************/
+    /* Write outputs to LATx, read inputs from PORTx. Here, all latches (LATx)
+     * are being cleared (set low) to ensure a controlled start-up state. */  
+    LATA = 0x00;
+    LATB = 0x00; 
+    LATC = 0x00;
+    LATD = 0x00;
+    LATE = 0x00;
+
+    /* After the states of LATx are known, the data direction registers, TRISx
+     * are configured. 0 --> output; 1 --> input. Default is  1. */
+    TRISA = 0xFF; // All inputs (this is the default, but is explicated here for learning purposes)
+    TRISB = 0xFF;
+    TRISC = 0x00;
+    TRISD = 0x00; // All output mode on port D for the LCD
+    TRISE = 0x00;
+    
+    /************************** A/D Converter Module **************************/
+    ADCON0 = 0x00;  // Disable ADC
+    ADCON1 = 0b00001111; // Set all A/D ports to digital (pg. 222)
+    // </editor-fold>
+    
+    INT1IE = 1; // Enable RB1 (keypad data available) interrupt
+    ei(); // Enable all interrupts
+    ////
+    ////
+    setup_main_screen(); 
+    while (current < 6) {
+        switch(current) {
+            case 0 :
+                while(current == 0) {}  //Do nothing until external interrupt changes current
+                break;
+            
+            case 1 :
+                setup_dosage_screen(r_screen_base, prescription); 
+                while(current == 1) {}  //Do nothing until external interrupt changes current
+                break;   
+            
+            case 2 :
+                setup_dosage_screen(r_screen_base, prescription); 
+                while(current == 2) {}  //Do nothing until external interrupt changes current
+                break;  
+            
+            case 3 :
+                setup_dosage_screen(r_screen_base, prescription); 
+                while(current == 3) {}  //Do nothing until external interrupt changes current
+                break;
+            
+            case 4 :
+                setup_daily_repeat_screen(daily_repeat); 
+                while(current == 4) {}  //Do nothing until external interrupt changes current
+                break;
+            
+            case 5 :
+                setup_weekly_repeat_screen(weekly_repeat); 
+                while(current == 5) {}  //Do nothing until external interrupt changes current
+                break;   
+            
+            default :
+                break;
+                
+        }
+    }
+    standby_screen(); 
+    
+    //Read from RTC 
+    I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock  
+    di(); // Disable all interrupts  
+    read_time(start_time_array);
+    //while (1){}  //execute program operations of actual microcontroller 
+    __delay_ms(2000);
+    read_time(final_time_array);
+    ei(); //enable all interrupts
+    /////////////////////////////////
+
+    current = 7;
+    while (1) {  // while loop to run final UI 
+        switch(current) {
+        case 7:   //initial done screen
+            setup_end_screen();
+            while (current == 7){}
+            break;
+            
+        case 8: //present all additional info
+            while (current == 8) {
+                cycle_through_options();
+            }
+            printf("hello");
+            break;
+            
+        case 9: 
+            setup_final_time_elapsed_screen(start_time_array, final_time_array);
+            while (current == 9){}
+            current = 7;
+            break;
+            
+        case 10: //info screen: leftover pills
+            setup_pills_remaining_screen(leftover_pills);
+            while (current == 10){}
+            current = 7;
+            break;
+        
+        case 11:   //info screen: prescription information
+            while (current == 11){
+                setup_run_summary_screen(prescription, daily_repeat, weekly_repeat);
+            }
+            current = 7;
+            break;
+        
+        default: 
+            break;
+        }     
+    }
+    }  
