@@ -66,8 +66,8 @@ char rtc_test(char* initial, char* final); //to execute test, run with start & f
 void solenoid_control(char solen_name, char curr_state, char on_off);
 
 //I/O Pin Enums 
-enum latx_types {A,B,C,D,SOLENOID};
-enum sol_types {SOL_TIME=1, SOL_TUBE_SWITCH=2, SOL_CLOSE_BOX=4};
+enum latx_types {DC_MOTOR,B,C,D,SOLENOID};
+enum sol_types {SOL_TIME=0, SOL_TUBE_SWITCH=1, SOL_CLOSE_BOX=2};
 void assign_to_latx(char latx, char pin_to_write);
 
 
@@ -83,6 +83,8 @@ void test_solenoid_control(void);
 
 void assign_to_latx(char latx, char pin_to_write) {
     switch (latx) {
+        case DC_MOTOR :
+            LATA = pin_to_write;
         case SOLENOID : 
             LATE = pin_to_write;
     }
@@ -468,6 +470,20 @@ void test_reverse_master_list(void) {
     reverse_master_list(test_master_list);
     printf("%d,%d", test_master_list[0][0], test_master_list[13][0]);
 }
+
+void test_solenoid_control(void) {
+    __lcd_clear();
+    __lcd_home();
+    
+    LATE = 0XFF;
+    while (1) {
+        solenoid_control(SOL_TIME, PORTE, 0); 
+        __delay_ms(1000); 
+        solenoid_control(SOL_TIME, PORTE, 1);
+        __delay_ms(1000);
+    }
+}
+
 //RTC Functions   
 char rtc_test(char* initial, char* final) {
     __lcd_clear();
@@ -519,32 +535,30 @@ char find_operation_time(char* initial, char* final) {
 
 //Actuator Control Functions 
 void solenoid_control(char solen_name, char curr_state, char on_off) {  //note: on_off only 0,1
+    //assumes that solenoids are in the X0, X1, X2 positions
     if (on_off == 1) {  //check to see whether to turn off or not
-        on_off = on_off >> (solen_name-1); //on+off is all 0s except 1 in pin position we want on
+        on_off = on_off >> solen_name; //on+off is all 0s except 1 in pin position we want on
         //printf("%d",on_off);
     }
     else{
-        on_off = 0;
-    }
+        on_off = 0; }
+    
     curr_state = curr_state & ~solen_name;
     char final = on_off | curr_state; 
     assign_to_latx(SOLENOID, final);
     
 }
 
-void test_solenoid_control(void) {
-    __lcd_clear();
-    __lcd_home();
-    
-    LATE = 0XFF;
-    while (1) {
-        solenoid_control(SOL_TIME, PORTE, 0); 
-        __delay_ms(1000); 
-        solenoid_control(SOL_TIME, PORTE, 1);
-        __delay_ms(1000);
+void dc_motor_control(char motor_name, char curr_state, char on_off, char for_back) {
+    if (on_off == 1) {
+        
     }
+    else{
+        on_off =0; }
+    
+    
+     
 }
-
 
 void main(void){
     
