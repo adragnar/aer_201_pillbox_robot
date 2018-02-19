@@ -62,8 +62,13 @@ void read_time(char* a);
 char find_operation_time(char* initial, char* final);  
 char rtc_test(char* initial, char* final); //to execute test, run with start & final time arrays below setup_main-screen
 
+//Internal Data Structures
+void populate_master_list (char master_list[14][3], char* prescrip_list, char daily, char weekly);
+void reverse_master_list(char master_list[14][3]);
+
 //Tests
 void test_populate_master_list(void);
+void test_reverse_master_list(void);
 
 void main(void){
     
@@ -93,7 +98,7 @@ void main(void){
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
     ////
-
+    
     ////
     setup_main_screen(); 
     while( current < 6) {
@@ -516,6 +521,26 @@ void populate_master_list (char master_list[14][3], char* prescrip_list, char da
         }      
     }
 
+void reverse_master_list(char master_list[14][3]) {
+    __lcd_clear();
+    __lcd_home();
+    
+    char i,j;
+    char temp[14][3];
+    
+    //copy values of master list into temp copy 
+    for (i=0; i<14; i++) {  //swap the values of master list
+        for (j=0; j<3; j++) {
+            temp[i][j] = master_list[i][j];
+        }
+    }
+    for (i=0; i<14; i++) {  //swap the values of master list
+        for (j=0; j<3; j++) {
+            master_list[i][j] = temp[13-i][j];
+        }
+    }
+}
+
 void test_populate_master_list (void) {
     __lcd_clear();
     __lcd_home();
@@ -536,9 +561,15 @@ void test_populate_master_list (void) {
     printf("%d:", test_master_list[5][0]);
     printf("%d:", test_master_list[6][0]);
     printf("%d:", test_master_list[7][0]);
-    printf("%d:", test_master_list[8][0]);
-    
+    printf("%d:", test_master_list[8][0]);   
 }   
+
+void test_reverse_master_list(void) {
+    char test_master_list[14][3] = {{1,1,1}, {2,2,2}, {3,3,3}, {4,4,4}, {5,5,5}, {6,6,6},
+        {7,7,7}, {8,8,8},{9,9,9}, {10,10,10},{11,11,11}, {12,12,12},{13,13,13}, {14,14,14}};
+    reverse_master_list(test_master_list);
+    printf("%d,%d", test_master_list[0][0], test_master_list[13][0]);
+}
 //RTC Functions   
 char rtc_test(char* initial, char* final) {
     __lcd_clear();
