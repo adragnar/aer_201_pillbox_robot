@@ -64,10 +64,15 @@ char rtc_test(char* initial, char* final); //to execute test, run with start & f
 
 //actuator_control_functions
 void solenoid_control(char solen_name, char curr_state, char on_off);
+void dc_motor_control(char motor_name, char curr_state, char motor_state);
 
 //I/O Pin Enums 
-enum latx_types {DC_MOTOR,B,C,D,SOLENOID};
+
 enum sol_types {SOL_TIME=0, SOL_TUBE_SWITCH=1, SOL_CLOSE_BOX=2};
+enum dc_motor_names {CASEA=0x03, CASEB=0x0C, CASEC=0X30};  //let value be what pins need to be high that control motos
+enum motor_states {REST_DC=0, FORWARD_DC=1, BRAKE_DC=2}; //let value be the 2-pin drive configuration
+
+enum latx_types {DC_MOTOR,B,C,D,SOLENOID};
 void assign_to_latx(char latx, char pin_to_write);
 
 
@@ -80,13 +85,16 @@ void reverse_master_list(char master_list[14][3]);
 void test_populate_master_list(void);
 void test_reverse_master_list(void);
 void test_solenoid_control(void);
+void test_dc_motor_control(void);
 
 void assign_to_latx(char latx, char pin_to_write) {
     switch (latx) {
         case DC_MOTOR :
             LATA = pin_to_write;
+            break;
         case SOLENOID : 
             LATE = pin_to_write;
+            break;
     }
 }
 
@@ -484,6 +492,29 @@ void test_solenoid_control(void) {
     }
 }
 
+void test_dc_motor_control(void) {
+    __lcd_clear();
+    __lcd_home();
+    initLCD();
+   
+    /* Initial run sequence */
+    __lcd_display_control(1, 0, 0);
+    
+    
+    LATA = 0XFF;
+    while (1) {
+        dc_motor_control(CASEA, PORTA, BRAKE_DC); 
+        printf("1");
+        __delay_ms(1000); 
+        dc_motor_control(CASEA, PORTA, REST_DC);
+        printf("2");
+        __delay_ms(1000);
+        dc_motor_control(CASEA, PORTA, FORWARD_DC);
+        printf("3");
+        __delay_ms(1000);
+    }
+}
+
 //RTC Functions   
 char rtc_test(char* initial, char* final) {
     __lcd_clear();
@@ -549,15 +580,21 @@ void solenoid_control(char solen_name, char curr_state, char on_off) {  //note: 
     
 }
 
-void dc_motor_control(char motor_name, char curr_state, char on_off, char for_back) {
-    if (on_off == 1) {
-        
+void dc_motor_control(char motor_name, char curr_state, char motor_state) {
+    curr_state = curr_state & ~motor_name; 
+    switch(motor_name){
+        case CASEA:
+            motor_state = motor_state >> 0;
+            break;
+        case CASEB:
+            motor_state = motor_state >> 2;
+            break;
+        case CASEC:
+            motor_state = motor_state >> 4;
+            break;
     }
-    else{
-        on_off =0; }
-    
-    
-     
+    char final = motor_state | curr_state;
+    assign_to_latx(DC_MOTOR, final);
 }
 
 void main(void){
@@ -574,8 +611,8 @@ void main(void){
 
     /* After the states of LATx are known, the data direction registers, TRISx
      * are configured. 0 --> output; 1 --> input. Default is  1. */
-    TRISA = 0xFF; // All inputs (this is the default, but is explicated here for learning purposes)
-    TRISB = 0xFF;
+    TRISA = 0x00; 
+    TRISB = 0x00;
     TRISC = 0x00;
     TRISD = 0x00; // All output mode on port D for the LCD
     TRISE = 0x00;
@@ -588,6 +625,7 @@ void main(void){
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
     ////
+    test_dc_motor_control();
     ////
     setup_main_screen(); 
     while (current < 6) {
