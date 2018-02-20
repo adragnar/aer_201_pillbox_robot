@@ -99,11 +99,11 @@ void modified_setup_dosage_screen(char* prescrip_list){  //setup_dosage without 
     printf("R:%d F:%d L:%d", prescrip_list[0], prescrip_list[1], prescrip_list[2]); 
 }
 
-//void setup_final_time_elapsed_screen(char* initial_setup_list, char* final_setup_list) {  //setup the final time screen
-//    char time_elapsed = find_operation_time(initial_setup_list, final_setup_list);  //get the final; time
-//    __lcd_clear();
-//    __lcd_home(); 
-//    printf("Time Elapsed");
-//    __lcd_newline();
-//    printf("%d seconds", time_elapsed);
-//}
+void setup_final_time_elapsed_screen(char* initial_setup_list, char* final_setup_list) {  //setup the final time screen
+    char time_elapsed = find_operation_time(initial_setup_list, final_setup_list);  //get the final; time
+    __lcd_clear();
+    __lcd_home(); 
+    printf("Time Elapsed");
+    __lcd_newline();
+    printf("%d seconds", time_elapsed);
+}

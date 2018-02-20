@@ -14,6 +14,7 @@ extern "C" {
 
 #include "global_variables.h"
 #include "lcd.h"
+#include "rtc.h"
 
     
 void setup_main_screen();
@@ -26,7 +27,7 @@ void cycle_through_options();
 void setup_pills_remaining_screen(char* leftover_count);
 void setup_run_summary_screen(char* prescrip_list, char repeat_daily, char repeat_weekly);
 void modified_setup_dosage_screen(char* prescrip_list); 
-//void setup_final_time_elapsed_screen(char* initial_setup_list, char* final_setup_list);
+void setup_final_time_elapsed_screen(char* initial_setup_list, char* final_setup_list);
 
 
 #ifdef	__cplusplus
