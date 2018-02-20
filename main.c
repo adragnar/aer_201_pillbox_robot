@@ -18,6 +18,8 @@
 #include "lcd.h"
 #include "I2C.h"
 
+#include "timer.h"
+
 void setup_main_screen();
 void setup_dosage_screen(char screen_base, char* prescrip_list);
 void setup_daily_repeat_screen(char repeat);
@@ -55,6 +57,11 @@ const char weekly_options[3][16] = {"Everyday", "Alt Start Sunday","Alt Start Mo
 enum daily_options_values {MORNING, AFTERNOON, BOTH};
 enum weekly_options_values {EVERYDAY, ALT_SUNDAY, ALT_MONDAY};
 
+//Timer 
+#define PILL_REV_TIME 1 //IN SECONDS  
+double time_from_timer0 = 0;  //global variable containing time from timer0
+void setup_timer0(void);
+
 //RTC
 char start_time_array[3]; 
 char final_time_array[3];
@@ -86,6 +93,7 @@ void test_populate_master_list(void);
 void test_reverse_master_list(void);
 void test_solenoid_control(void);
 void test_dc_motor_control(void);
+void test_timer0(void);
 
 void assign_to_latx(char latx, char pin_to_write) {
     switch (latx) {
@@ -203,11 +211,19 @@ void interrupt interruptHandler(void){
                     current = 11;
                     break;
              }
-         }
-        
-        
+         } 
         INT1IF = 0;  // Clear interrupt flag bit to signify it's been handled
     }
+    
+    else if (TMR0IF) {
+        time_from_timer0 += 0.0065536; //increment time 
+        printf("%f",time_from_timer0);
+        if (time_from_timer0 >= PILL_REV_TIME) {  //If enough time has passed to re-go through dispense cycle
+            T0CONbits.TMR0ON = 0;  //Turn off timer0
+        }
+        TMR0IF = 0;
+    }
+    
 }
 
 //Final UI Setup 
@@ -515,6 +531,21 @@ void test_dc_motor_control(void) {
     }
 }
 
+void test_timer0(void) {
+    __lcd_clear();
+    __lcd_home();
+    setup_timer0();
+    while(1) {
+        if (time_from_timer0 >= PILL_REV_TIME){
+            break;
+        }
+    }
+    __lcd_clear();
+    __lcd_home();
+    printf("%f",time_from_timer0);
+    while(1){}
+}
+
 //RTC Functions   
 char rtc_test(char* initial, char* final) {
     __lcd_clear();
@@ -625,7 +656,7 @@ void main(void){
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
     ////
-    test_dc_motor_control();
+    test_timer0();
     ////
     setup_main_screen(); 
     while (current < 6) {
