@@ -1,11 +1,23 @@
 #include "information_organization.h"
 
 
-void assign_to_latx(char latx, char pin_to_write) {
+void assign_to_latx(char latx, char dev_name, char pin_to_write) {
     switch (latx) {
         case DC_MOTOR :
             LATA = pin_to_write;
             break;
+        
+        case SENSOR : 
+            switch(dev_name){
+                case COLOR_SENSOR : 
+                    LATA = pin_to_write;
+                    break;
+                
+                case BREAK1 : 
+                    LATA = pin_to_write;
+                    break;
+            }
+        
         case SOLENOID : 
             LATE = pin_to_write;
             break;

@@ -17,7 +17,7 @@ extern "C" {
 #include "global_variables.h"
     
 //Internal Data Structure Functions 
-void assign_to_latx(char latx, char pin_to_write);
+void assign_to_latx(char latx, char dev_name, char pin_to_write);
 void populate_master_list (char master_list[14][3], char* prescrip_list, char daily, char weekly);
 void reverse_master_list(char master_list[14][3]);
 
