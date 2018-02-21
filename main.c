@@ -175,6 +175,7 @@ void main(void){
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
     ////
+    test_read_reset_sensor();
     ////
     setup_main_screen(); 
     while (current < 6) {

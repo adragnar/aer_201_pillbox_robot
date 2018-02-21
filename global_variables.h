@@ -50,10 +50,10 @@ extern char final_time_array[3];
 enum sol_types {SOL_TIME=0, SOL_TUBE_SWITCH=1, SOL_CLOSE_BOX=2};
 enum dc_motor_names {CASEA=0x03, CASEB=0x0C, CASEC=0X30};  //let value be what pins need to be high that control motos
 enum motor_states {REST_DC=0, FORWARD_DC=1, BRAKE_DC=2}; //let value be the 2-pin drive configuration
-enum latx_types {DC_MOTOR,B,C,D,SOLENOID};
+enum latx_types {DC_MOTOR,SENSOR,SOLENOID};
 
 enum sensor_names {COLOR_SENSOR, BREAK1, BREAK2, BREAK3};
-char sensor_shift_list[4]; //indexed by above enum values 
+extern char sensor_shift_list[4]; //indexed by above enum values 
 #define SENSOR_HOLD_TIME 1
 
 

@@ -80,3 +80,14 @@ void test_timer0(void) {
     printf("%f",time_from_timer0);
     while(1){}
 }
+
+void test_read_reset_sensor(void) {
+    __lcd_clear();
+    __lcd_home();
+    
+    TRISA = 0x10;
+    char test_sensor_shift_list[4] = {4,4,4,4};
+    char ans = read_reset_sensor(0, PORTA, test_sensor_shift_list);
+    printf("%d",ans);
+    while(1){}
+}

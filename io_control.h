@@ -14,6 +14,7 @@ extern "C" {
 
 #include <xc.h>
 #include "configBits.h"
+#include "lcd.h"
 #include "global_variables.h"
 #include "information_organization.h"
     

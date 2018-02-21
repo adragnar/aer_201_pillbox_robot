@@ -11,7 +11,7 @@ void solenoid_control(char solen_name, char curr_state, char on_off) {  //note: 
     
     curr_state = curr_state & ~solen_name;
     char final = on_off | curr_state; 
-    assign_to_latx(SOLENOID, final);
+    assign_to_latx(SOLENOID,0, final);
     
 }
 
@@ -29,7 +29,7 @@ void dc_motor_control(char motor_name, char curr_state, char motor_state) {
             break;
     }
     char final = motor_state | curr_state;
-    assign_to_latx(DC_MOTOR, final);
+    assign_to_latx(DC_MOTOR,0, final);
 }
 
 char read_reset_sensor(char sensor_name, char curr_state, char sensor_shift_list[4]){  //ASSUME sensor name is # of bits which must be shifted for 1st pin
@@ -41,6 +41,8 @@ char read_reset_sensor(char sensor_name, char curr_state, char sensor_shift_list
     char old_curr_state = curr_state;
     curr_state = curr_state | (0x2 << sensor_shift_list[sensor_name]);
     __delay_us(SENSOR_HOLD_TIME); 
+    printf("%x", curr_state);
     curr_state = old_curr_state; 
- 
+    assign_to_latx(SENSOR, sensor_name, curr_state);
+    return is_read;
 }
