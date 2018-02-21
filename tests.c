@@ -91,3 +91,24 @@ void test_read_reset_sensor(void) {
     printf("%d",ans);
     while(1){}
 }
+
+void test_eeprom(void) {
+    //Assume for test that NUM_LOG_ENTRIES = 1
+    __lcd_clear();
+    __lcd_home();
+    
+    char data[1] = {5};
+    write_eeprom(0,data);
+    char read_data[1];
+    read_eeprom(0,read_data);
+    printf("%d",read_data[0]);
+    
+    //now at different address
+    char data[1] = {8};
+    write_eeprom(32,data);
+    char read_data[1];
+    read_eeprom(32,read_data);
+    printf("%d",read_data[0]);
+    while(1){}
+    
+}

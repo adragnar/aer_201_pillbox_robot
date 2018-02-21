@@ -57,6 +57,9 @@ extern char sensor_shift_list[4]; //indexed by above enum values
 #define SENSOR_HOLD_TIME 1
 
 
+//EEPROM
+#define NUM_ENTRIES_LOG 1
+
 
 #ifdef	__cplusplus
 }
