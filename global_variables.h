@@ -52,6 +52,10 @@ enum dc_motor_names {CASEA=0x03, CASEB=0x0C, CASEC=0X30};  //let value be what p
 enum motor_states {REST_DC=0, FORWARD_DC=1, BRAKE_DC=2}; //let value be the 2-pin drive configuration
 enum latx_types {DC_MOTOR,B,C,D,SOLENOID};
 
+enum sensor_names {COLOR_SENSOR, BREAK1, BREAK2, BREAK3};
+char sensor_shift_list[4]; //indexed by above enum values 
+#define SENSOR_HOLD_TIME 1
+
 
 
 #ifdef	__cplusplus

@@ -31,3 +31,16 @@ void dc_motor_control(char motor_name, char curr_state, char motor_state) {
     char final = motor_state | curr_state;
     assign_to_latx(DC_MOTOR, final);
 }
+
+char read_reset_sensor(char sensor_name, char curr_state, char sensor_shift_list[4]){  //ASSUME sensor name is # of bits which must be shifted for 1st pin
+    /*sensor_name os # of bits which must be shifted. Curr state is the register corresponding to the 
+           sensor name that we're using */ 
+    //Read value of sensor 
+    char is_read = (curr_state >> sensor_shift_list[sensor_name]) & (0x01);
+    //Write to sensor reset (pulse MSB)
+    char old_curr_state = curr_state;
+    curr_state = curr_state | (0x2 << sensor_shift_list[sensor_name]);
+    __delay_us(SENSOR_HOLD_TIME); 
+    curr_state = old_curr_state; 
+ 
+}
