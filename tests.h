@@ -14,6 +14,7 @@ extern "C" {
 
 #include <xc.h>
 #include "configBits.h"
+#include "eeprom.h"
 #include "global_variables.h"  
 #include "I2C.h"
 #include "information_organization.h"
@@ -29,6 +30,7 @@ void test_solenoid_control(void);
 void test_dc_motor_control(void);
 void test_timer0(void);
 void test_read_reset_sensor(void);
+void test_eeprom(void);
 
 
 #ifdef	__cplusplus
