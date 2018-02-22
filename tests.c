@@ -31,14 +31,25 @@ void test_reverse_master_list(void) {
 }
 
 void test_solenoid_control(void) {
+    //assumes solenoids are E0,E1,E2
     __lcd_clear();
     __lcd_home();
+    TRISE = 0X00;
     
+    char test_sol_shift_list[3] = {0,1,2};
     LATE = 0XFF;
     while (1) {
-        solenoid_control(SOL_TIME, PORTE, 0); 
+        solenoid_control(SOL_TIME, PORTE, 0, test_sol_shift_list); 
         __delay_ms(1000); 
-        solenoid_control(SOL_TIME, PORTE, 1);
+        solenoid_control(SOL_TIME, PORTE, 1, test_sol_shift_list);
+        __delay_ms(1000);
+        solenoid_control(SOL_TUBE_SWITCH, PORTE, 0, test_sol_shift_list); 
+        __delay_ms(1000); 
+        solenoid_control(SOL_TUBE_SWITCH, PORTE, 1, test_sol_shift_list);
+        __delay_ms(1000);
+        solenoid_control(SOL_CLOSE_BOX, PORTE, 0, test_sol_shift_list); 
+        __delay_ms(1000); 
+        solenoid_control(SOL_CLOSE_BOX, PORTE, 1, test_sol_shift_list);
         __delay_ms(1000);
     }
 }

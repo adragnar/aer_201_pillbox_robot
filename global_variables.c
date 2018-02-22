@@ -22,6 +22,9 @@ char leftover_pills[3] = {0,0,0};  //leftover resevoir pills counted by machine.
 const char daily_options[3][10] = {"Morning", "Afternoon", "Both"};
 const char weekly_options[3][16] = {"Everyday", "Alt Start Sunday","Alt Start Monday"};
 
+//Solenoids 
+char sol_shift_list[NUM_SOLEN] = {0,1,2}; //Position of each solenoid pin
+
 //Timer
 #define PILL_REV_TIME 1 //IN SECONDS  
 double time_from_timer0 = 0;  //global variable containing time from timer0
@@ -31,4 +34,4 @@ char start_time_array[3];
 char final_time_array[3];
 
 //Sensors 
-char sensor_shift_list[4] = {6,6,6,6};
+char sensor_shift_list[4] = {6,6,6,6}; //positions of each sensor pins LSB

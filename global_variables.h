@@ -46,8 +46,11 @@ extern double time_from_timer0;  //global variable containing time from timer0
 extern char start_time_array[3]; 
 extern char final_time_array[3];
 
-//I/O devices
-enum sol_types {SOL_TIME=0, SOL_TUBE_SWITCH=1, SOL_CLOSE_BOX=2};
+//Solenoids
+#define NUM_SOLEN 3
+enum sol_names {SOL_TIME, SOL_TUBE_SWITCH, SOL_CLOSE_BOX};
+extern char sol_shift_list[NUM_SOLEN];
+
 enum dc_motor_names {CASEA=0x03, CASEB=0x0C, CASEC=0X30};  //let value be what pins need to be high that control motos
 enum motor_states {REST_DC=0, FORWARD_DC=1, BRAKE_DC=2}; //let value be the 2-pin drive configuration
 enum latx_types {DC_MOTOR,SENSOR,SOLENOID};
