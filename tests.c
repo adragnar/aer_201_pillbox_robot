@@ -57,24 +57,24 @@ void test_solenoid_control(void) {
 void test_dc_motor_control(void) {
     __lcd_clear();
     __lcd_home();
-    initLCD();
-   
-    /* Initial run sequence */
-    __lcd_display_control(1, 0, 0);
     
-    
-    LATA = 0XFF;
+    TRISA = 0X00;
+    LATA = 0X00;
+    char test_dc_shift_list[3] = {0,1,2};
     while (1) {
-        dc_motor_control(CASEA, PORTA, BRAKE_DC); 
-        printf("1");
+        dc_motor_control(CASEA, PORTA, 1, test_dc_shift_list); 
         __delay_ms(1000); 
-        dc_motor_control(CASEA, PORTA, REST_DC);
-        printf("2");
+        dc_motor_control(CASEA, PORTA, 0, test_dc_shift_list); 
         __delay_ms(1000);
-        dc_motor_control(CASEA, PORTA, FORWARD_DC);
-        printf("3");
+        dc_motor_control(CASEB, PORTA, 1, test_dc_shift_list); 
         __delay_ms(1000);
+        dc_motor_control(CASEB, PORTA, 0, test_dc_shift_list); 
+        __delay_ms(1000);
+        dc_motor_control(CASEC, PORTA, 1, test_dc_shift_list); 
+        __delay_ms(1000);
+        dc_motor_control(CASEC, PORTA, 0, test_dc_shift_list);
     }
+    while(1){}
 }
 
 void test_timer0(void) {

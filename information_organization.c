@@ -4,9 +4,20 @@
 void assign_to_latx(char latx, char dev_name, char pin_to_write) {
     switch (latx) {
         case DC_MOTOR :
-            LATA = pin_to_write;
-            break;
-        
+           switch(dev_name){
+                case CASEA : 
+                    LATA = pin_to_write;
+                    break;
+                
+                case CASEB : 
+                    LATA = pin_to_write;
+                    break;
+                
+               case CASEC : 
+                    LATA = pin_to_write;
+                    break;
+            }
+           break;
         case SENSOR : 
             switch(dev_name){
                 case COLOR_SENSOR : 
@@ -17,8 +28,9 @@ void assign_to_latx(char latx, char dev_name, char pin_to_write) {
                     LATA = pin_to_write;
                     break;
             }
-        
+            break;
         case SOLENOID : 
+            printf("0");
             switch(dev_name){
                 case SOL_TIME : 
                     LATE = pin_to_write;

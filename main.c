@@ -175,7 +175,7 @@ void main(void){
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
     ////
-    test_solenoid_control();
+    test_dc_motor_control();
     ////
     setup_main_screen(); 
     while (current < 6) {

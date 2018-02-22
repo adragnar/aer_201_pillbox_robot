@@ -15,6 +15,7 @@ extern "C" {
 #include <xc.h>
 #include "configBits.h"
 #include "global_variables.h"
+#include "lcd.h"
     
 //Internal Data Structure Functions 
 void assign_to_latx(char latx, char dev_name, char pin_to_write);

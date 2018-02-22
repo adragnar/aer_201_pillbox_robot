@@ -19,7 +19,7 @@ extern "C" {
 #include "information_organization.h"
     
 void solenoid_control(char solen_name, char curr_state, char on_off, char sol_shift_list[NUM_SOLEN]);
-void dc_motor_control(char motor_name, char curr_state, char motor_state);
+void dc_motor_control(char motor_name, char curr_state, char on_off, char dc_shift_list[NUM_DC_MOTORS]);
 char read_reset_sensor(char sensor_name, char curr_state, char sensor_shift_list[4]);
 
 

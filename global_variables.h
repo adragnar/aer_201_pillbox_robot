@@ -51,8 +51,11 @@ extern char final_time_array[3];
 enum sol_names {SOL_TIME, SOL_TUBE_SWITCH, SOL_CLOSE_BOX};
 extern char sol_shift_list[NUM_SOLEN];
 
-enum dc_motor_names {CASEA=0x03, CASEB=0x0C, CASEC=0X30};  //let value be what pins need to be high that control motos
-enum motor_states {REST_DC=0, FORWARD_DC=1, BRAKE_DC=2}; //let value be the 2-pin drive configuration
+//DC Motors 
+#define NUM_DC_MOTORS 3
+enum dc_motor_names {CASEA, CASEB, CASEC};  //let value be what pins need to be high that control motos
+extern char dc_shift_list[NUM_DC_MOTORS];
+
 enum latx_types {DC_MOTOR,SENSOR,SOLENOID};
 
 enum sensor_names {COLOR_SENSOR, BREAK1, BREAK2, BREAK3};
