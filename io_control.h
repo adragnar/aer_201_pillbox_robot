@@ -21,8 +21,9 @@ extern "C" {
 void solenoid_control(char solen_name, char curr_state, char on_off, char sol_shift_list[NUM_SOLEN]);
 void dc_motor_control(char motor_name, char curr_state, char on_off, char dc_shift_list[NUM_DC_MOTORS]);
 char read_reset_sensor(char sensor_name, char curr_state, char sensor_shift_list[4]);
-
-
+void stepper_motor_control(char motor_name, char curr_state, char num_steps, char dir, char stepper_shift_list[NUM_STEPPERS]);
+void reset_stepper(char motor_name, char curr_state, char is_reset, char stepper_shift_list[NUM_STEPPERS]);
+void enable_stepper(char motor_name, char curr_state, char on_off, char stepper_shift_list[NUM_STEPPERS]);
 
 #ifdef	__cplusplus
 }

@@ -123,3 +123,21 @@ void test_eeprom(void) {
     while(1){}
     
 }
+
+void test_stepper_motor_control(void) {
+    //Assume for test that Stepper at RB0-3
+    //test artificially increases stepper actuate time 
+    //Assumes stepper in RB2-3
+    //Remember - often different pulses are too hard to see cause fast 
+    __lcd_clear();
+    __lcd_home();
+    
+    TRISB = 0X00;
+    LATB = 0X00;
+    char test_stepper_shift_list[NUM_STEPPERS] = {2}; 
+    while (1) {
+        stepper_motor_control(0, PORTB, 2, 0, test_stepper_shift_list);
+        __delay_ms(5000);
+        stepper_motor_control(0, PORTB, 2, 1, test_stepper_shift_list);
+    }
+}

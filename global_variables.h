@@ -53,11 +53,18 @@ extern char sol_shift_list[NUM_SOLEN];
 
 //DC Motors 
 #define NUM_DC_MOTORS 3
-enum dc_motor_names {CASEA, CASEB, CASEC};  //let value be what pins need to be high that control motos
+enum dc_motor_names {CASEA, CASEB, CASEC};  
 extern char dc_shift_list[NUM_DC_MOTORS];
 
-enum latx_types {DC_MOTOR,SENSOR,SOLENOID};
+//Steppers
+#define NUM_STEPPERS 1
+#define STEPPER_ACTUATE_TIME 500  //ms
+enum stepper_motor_names {RACK};
+extern char stepper_shift_list[NUM_STEPPERS];
 
+enum latx_types {DC_MOTOR,SENSOR,SOLENOID,STEPPER};
+
+//Sensors
 enum sensor_names {COLOR_SENSOR, BREAK1, BREAK2, BREAK3};
 extern char sensor_shift_list[4]; //indexed by above enum values 
 #define SENSOR_HOLD_TIME 1

@@ -28,6 +28,9 @@ char sol_shift_list[NUM_SOLEN] = {0,0,0}; //Position of each solenoid pin
 //DC MOTORS 
 char dc_shift_list[NUM_DC_MOTORS] = {0,0,0}; //Position of each motor pin
 
+//STEPPERS
+char stepper_shift_list[NUM_STEPPERS] = {2};  //Position of least significant motor pin
+
 //Timer
 #define PILL_REV_TIME 1 //IN SECONDS  
 double time_from_timer0 = 0;  //global variable containing time from timer0

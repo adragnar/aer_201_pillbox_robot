@@ -31,6 +31,7 @@ void test_dc_motor_control(void);
 void test_timer0(void);
 void test_read_reset_sensor(void);
 void test_eeprom(void);
+void test_stepper_motor_control(void); 
 
 
 #ifdef	__cplusplus

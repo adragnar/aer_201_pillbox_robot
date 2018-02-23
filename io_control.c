@@ -19,6 +19,40 @@ void dc_motor_control(char motor_name, char curr_state, char on_off, char dc_shi
     assign_to_latx(DC_MOTOR, motor_name, final);
 }
 
+void enable_stepper(char motor_name, char curr_state, char on_off, char stepper_shift_list[NUM_STEPPERS]) {
+    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+4));
+    on_off = (on_off << (stepper_shift_list[motor_name]+4));
+    curr_state = curr_state | on_off; 
+    assign_to_latx(STEPPER, motor_name, curr_state);
+}
+
+void reset_stepper(char motor_name, char curr_state, char is_reset, char stepper_shift_list[NUM_STEPPERS]) {
+    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+3));
+    is_reset = (is_reset << (stepper_shift_list[motor_name]+3));
+    curr_state = curr_state | is_reset; 
+    assign_to_latx(STEPPER, motor_name, curr_state);
+}
+
+void stepper_motor_control(char motor_name, char curr_state, char num_steps, char dir, char stepper_shift_list[NUM_STEPPERS]) {
+    //assumes stepper pin setup from high -> low: enable, reset, dir, step
+    curr_state = curr_state & ~(0x01 << stepper_shift_list[motor_name]+1);  //set motor direction 
+    dir = (dir << (stepper_shift_list[motor_name]+1));
+    curr_state = curr_state | dir; 
+    //printf("%d",curr_state);
+    int i; 
+    for (i=0; i<num_steps; i++) {  //pulse the step pin
+        //printf("%d", curr_state);
+        char step_bit = (0x01 << stepper_shift_list[motor_name]);
+        curr_state = curr_state | step_bit;  //can assume that step_bit is 0 cause cleared last run
+        //printf("%d",curr_state);
+        assign_to_latx(STEPPER, motor_name, curr_state);
+        __delay_ms(STEPPER_ACTUATE_TIME);  //wait for stepper to actually run
+        curr_state = curr_state & ~(0x01 << stepper_shift_list[motor_name]);
+        assign_to_latx(STEPPER, motor_name, curr_state);
+        __delay_ms(500);
+    }
+}
+
 char read_reset_sensor(char sensor_name, char curr_state, char sensor_shift_list[4]){  //ASSUME sensor name is # of bits which must be shifted for 1st pin
     /*sensor_name os # of bits which must be shifted. Curr state is the register corresponding to the 
            sensor name that we're using */ 
