@@ -230,7 +230,7 @@ void main(void){
         reverse_master_list(master_list);  //reverse list if needed 
         printf("reverse");
     }
-
+    //while(1){}
     //Step 2 The dispensing cycle 
     TRISB = 0x00;
     enable_stepper(RACK, PORTB, 1, stepper_shift_list); //turn on and bring stepper to starting point

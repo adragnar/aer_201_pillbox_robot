@@ -20,8 +20,8 @@ void dc_motor_control(char motor_name, char curr_state, char on_off, char dc_shi
 }
 
 void enable_stepper(char motor_name, char curr_state, char on_off, char stepper_shift_list[NUM_STEPPERS]) {
-    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+4));
-    on_off = (on_off << (stepper_shift_list[motor_name]+4));
+    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+3));
+    on_off = (on_off << (stepper_shift_list[motor_name]+3));
     curr_state = curr_state | on_off; 
     assign_to_latx(STEPPER, motor_name, curr_state);
 }
