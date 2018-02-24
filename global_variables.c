@@ -26,7 +26,7 @@ const char weekly_options[3][16] = {"Everyday", "Alt Start Sunday","Alt Start Mo
 char sol_shift_list[NUM_SOLEN] = {0,0,0}; //Position of each solenoid pin
 
 //DC MOTORS 
-char dc_shift_list[NUM_DC_MOTORS] = {0,0,0}; //Position of each motor pin
+char dc_shift_list[NUM_DC_MOTORS] = {3,4,5}; //Position of each motor pin RA3-5
 
 //STEPPERS
 char stepper_shift_list[NUM_STEPPERS] = {2};  //Position of least significant motor pin
@@ -40,7 +40,7 @@ char start_time_array[3];
 char final_time_array[3];
 
 //Sensors 
-char sensor_shift_list[4] = {6,6,6,6}; //positions of each sensor pins LSB
+char sensor_shift_list[4] = {6,2,4,6}; //positions of each sensor pins LSB
 
 //GLCD 
 const char op_names[NUM_DISPLAYED_DIVISIONS][32] = {"User Input", "Check Box Orientation", 

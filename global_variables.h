@@ -38,8 +38,11 @@ extern const char weekly_options[3][16];
 enum daily_options_values {MORNING, AFTERNOON, BOTH};
 enum weekly_options_values {EVERYDAY, ALT_SUNDAY, ALT_MONDAY};
 
+//Pill Dispensing
+#define PILL_REV_TIME_FIRST 1200 //IN SECONDS
+#define PILL_REV_TIME 1000
+
 //Timer
-#define PILL_REV_TIME 1 //IN SECONDS  
 extern double time_from_timer0;  //global variable containing time from timer0
 
 //RTC
@@ -61,6 +64,7 @@ extern char dc_shift_list[NUM_DC_MOTORS];
 #define STEPPER_ACTUATE_TIME 500  //ms
 enum stepper_motor_names {RACK};
 extern char stepper_shift_list[NUM_STEPPERS];
+enum stepper_direction {FORWARD_STEPPER, BACKWARD_STEPPER}
 
 enum latx_types {DC_MOTOR,SENSOR,SOLENOID,STEPPER};
 

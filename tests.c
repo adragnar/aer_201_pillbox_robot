@@ -78,6 +78,7 @@ void test_dc_motor_control(void) {
 }
 
 void test_timer0(void) {
+    //Note assuems timer in seconds 
     __lcd_clear();
     __lcd_home();
     setup_timer0();

@@ -163,8 +163,8 @@ void main(void){
 
     /* After the states of LATx are known, the data direction registers, TRISx
      * are configured. 0 --> output; 1 --> input. Default is  1. */
-    TRISA = 0x00; 
-    TRISB = 0xFF;
+    TRISA = 0x40;  //Connected: Col sensor A6-7
+    TRISB = 0xFF;  //Connected: Stepper B0-3
     TRISC = 0x00;
     TRISD = 0x00; // All output mode on port D for the LCD
     TRISE = 0x00;
@@ -177,7 +177,7 @@ void main(void){
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
     ////
-    test_glcd();
+    //test_glcd();
     ////
     setup_main_screen(); 
     while (current < 6) {
@@ -222,7 +222,51 @@ void main(void){
     I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock  
     di(); // Disable all interrupts  
     read_time(start_time_array);
-    //while (1){}  //execute program operations of actual microcontroller 
+    //////////////// Microcontroler Operation
+    //Step 1: Data structures 
+    populate_master_list(master_list, prescription, daily_repeat,weekly_repeat);  //setup internal structure
+    char orient_val = read_reset_sensor(COLOR_SENSOR, PORTA, sensor_shift_list);  //read sensor value and reset colour sensor
+    if (orient_val) {  //orient_val = 0, blue. =1, pink
+        reverse_master_list(master_list);  //reverse list if needed 
+        printf("reverse");
+    }
+
+    //Step 2 The dispensing cycle 
+    TRISB = 0x00;
+    enable_stepper(RACK, PORTB, 1, stepper_shift_list); //turn on and bring stepper to starting point
+    while(1){}
+//    char was_dispensed_list[3]; = {0,0,0};
+//    int i, j; 
+//    for(i=0; i<7; i=2*i) {  //day based dispense loop
+//        stepper_motor_control(RACK, PORTB, 1, FORWARD_STEPPER, stepper_shift_list);  //shift box forward
+//        char is_first = 0;
+//        char prescrip_x[3];
+//        char dispense_list[3];
+//        deep_copy(prescrip_x, master_list[i], 3); //make a copy of data in prescrip_x
+//        
+//        
+//        pill_dispense_logic_list(prescrip_x, dispense_list, 3); //generate the control signals 
+//        //Control the motors
+//        dc_motor_control(CASEA, PORTA, logic_list[0], dc_shift_list);
+//        dc_motor_control(CASEB, PORTA, logic_list[1], dc_shift_list);
+//        dc_motor_control(CASEC, PORTA, logic_list[2], dc_shift_list);
+//        if (is_first) {  //DIFFERENT DELAYS DEPEND ON WHETHER MOTOR HAS INTERTIA
+//            is_first = 0;
+//            __delay_ms(PILL_REV_TIME_FIRST);
+//        }
+//        else{ __delay_ms(PILL_REV_TIME); }
+//        //Check whether pills dispensed and decrement accordingly
+//        was_dispensed_list[0] = read_reset_sensor(BREAK1, PORTB, sensor_shift_list);
+//        was_dispensed_list[1] = read_reset_sensor(BREAK2, PORTB, sensor_shift_list);
+//        was_dispensed_list[2] = read_reset_sensor(BREAK3, PORTB, sensor_shift_list);
+//        decrement_remaining_pill_list(prescrip_x, was_dispensed_list, 3);
+//        
+//        
+//        
+//    }
+
+    
+    //////////////////////////////
     __delay_ms(2000);
     read_time(final_time_array);
     ei(); //enable all interrupts
