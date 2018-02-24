@@ -23,6 +23,8 @@ extern "C" {
 #include "rtc.h"
 #include "timer.h"
 #include "ui_functions.h"
+#include "GLCD_PIC.h"
+#include "px_ascii.h"
     
 void test_populate_master_list(void);
 void test_reverse_master_list(void);
@@ -31,7 +33,8 @@ void test_dc_motor_control(void);
 void test_timer0(void);
 void test_read_reset_sensor(void);
 void test_eeprom(void);
-void test_stepper_motor_control(void); 
+void test_stepper_motor_control(void);
+void test_glcd(void);
 
 
 #ifdef	__cplusplus
