@@ -27,8 +27,8 @@ void enable_stepper(char motor_name, char curr_state, char on_off, char stepper_
 }
 
 void reset_stepper(char motor_name, char curr_state, char is_reset, char stepper_shift_list[NUM_STEPPERS]) {
-    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+3));
-    is_reset = (is_reset << (stepper_shift_list[motor_name]+3));
+    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+2));
+    is_reset = (is_reset << (stepper_shift_list[motor_name]+2));
     curr_state = curr_state | is_reset; 
     assign_to_latx(STEPPER, motor_name, curr_state);
 }

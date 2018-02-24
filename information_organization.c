@@ -26,7 +26,15 @@ void assign_to_latx(char latx, char dev_name, char pin_to_write) {
                     break;
                 
                 case BREAK1 : 
-                    LATA = pin_to_write;
+                    LATB = pin_to_write;
+                    break;
+                    
+                case BREAK2 : 
+                    LATD = pin_to_write;
+                    break;
+                
+                case BREAK3 : 
+                    LATE = pin_to_write;
                     break;
             }
             break;
@@ -193,7 +201,7 @@ void deep_copy(char* copy_list, char* template_list, char sizeof_lists) {
     }
 }
 
-void pill_dispense_logic_list(char* prescrip_list, char* logic_list, char sizeof_lists) {
+void create_pill_dispense_logic_list(char* prescrip_list, char* logic_list, char sizeof_lists) {
     int i;
     for(i=0; i<sizeof_lists; i++) {
         if (prescrip_list[i] > 0) {
