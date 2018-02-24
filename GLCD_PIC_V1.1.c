@@ -355,3 +355,28 @@ void initGLCD(void){
     __DISPON(); // Turn on display (enable output from frame memory; mandatory)
     __delay_ms(10); // Just in case the display needs time to turn on
 }
+
+void draw_progress_bar(char next_state, unsigned long colour) {
+    unsigned char top_left[2] = {GLCD_MARGIN, GLCD_MARGIN};  //xy coordinates
+    unsigned char bar_width = (128 - 2*GLCD_MARGIN)/NUM_DIVISIONS;
+    unsigned char bar_height = 36; 
+    
+    //printf("%d",bar_width*next_state);
+    glcdDrawRectangle(top_left[0], (top_left[0] + bar_width*next_state), 
+            top_left[1], (top_left[1] + bar_height), colour);  //FIRST DRAW TOTAL SOLID BAR 
+    
+    //Now draw the outline for rest of bar 
+    top_left[0] = top_left[0] + bar_width*next_state; 
+    int i; 
+    for (i=top_left[0]; i < bar_width*NUM_DIVISIONS; i++){  //draw both horizontal lines 
+        glcdDrawPixel(i, top_left[1], colour);
+        glcdDrawPixel(i, top_left[1]+(bar_height-1), colour);
+    }
+    int j;
+    for (i=top_left[0]; i < bar_width*NUM_DIVISIONS; i+=bar_width) {  //draw all vertical lines
+        for (j=top_left[1]; j<(top_left[1] + bar_height); j++) {
+            glcdDrawPixel(i,j,colour);
+        }
+    }
+    
+}

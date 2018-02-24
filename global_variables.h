@@ -69,10 +69,14 @@ enum sensor_names {COLOR_SENSOR, BREAK1, BREAK2, BREAK3};
 extern char sensor_shift_list[4]; //indexed by above enum values 
 #define SENSOR_HOLD_TIME 1
 
-
 //EEPROM
 #define NUM_ENTRIES_LOG 1
 
+//GLCD 
+#define NUM_DIVISIONS 17 
+enum op_states {USER_INPUT, CHECK_DIR, DISP1, DISP2, DISP3, DISP4, DISP5, DISP6, DISP7,
+                    CLOSE1, CLOSE2, CLOSE3, CLOSE4, CLOSE5, CLOSE6, CLOSE7, FINISH};
+#define GLCD_MARGIN 5
 
 #ifdef	__cplusplus
 }

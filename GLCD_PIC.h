@@ -11,6 +11,8 @@
 /********************************** Includes **********************************/
 #include <xc.h>
 #include "configBits.h"
+#include "global_variables.h"
+#include "lcd.h"
 
 /*********************************** Macros ***********************************/
 /* Display write commands (one-liners and 2-liners only). */
@@ -198,5 +200,8 @@ void glcdSetOrigin(unsigned char corner);
 
 /* Initialization sequence. */
 void initGLCD(void);
+
+//My GLCD Functions
+void draw_progress_bar(char next_state, unsigned long colour);
 
 #endif	/* GLCD_PIC_H */
