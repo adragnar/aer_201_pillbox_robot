@@ -24,6 +24,7 @@ extern "C" {
 #include "timer.h"
 #include "ui_functions.h"
 #include "GLCD_PIC.h"
+#include "px_ascii.h"
     
 void test_populate_master_list(void);
 void test_reverse_master_list(void);

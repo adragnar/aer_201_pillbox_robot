@@ -24,6 +24,7 @@
 #include "information_organization.h"
 #include "io_control.h"
 #include "GLCD_PIC.h"
+#include "px_ascii.h"
 
 #include "tests.h"
 
@@ -265,4 +266,4 @@ void main(void){
             break;
         }     
     }
-    }  
+}

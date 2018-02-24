@@ -9,10 +9,13 @@
 #define	GLCD_PIC_H
 
 /********************************** Includes **********************************/
+#include <stdio.h>
+#include <string.h>
 #include <xc.h>
 #include "configBits.h"
 #include "global_variables.h"
 #include "lcd.h"
+#include "px_ascii.h"
 
 /*********************************** Macros ***********************************/
 /* Display write commands (one-liners and 2-liners only). */
@@ -203,5 +206,6 @@ void initGLCD(void);
 
 //My GLCD Functions
 void draw_progress_bar(char next_state, unsigned long colour);
+void print_glcd_screen(char next_state, char colour, char* op_name);
 
 #endif	/* GLCD_PIC_H */

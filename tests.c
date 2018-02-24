@@ -151,9 +151,7 @@ void test_glcd(void) {
     
     /* Declare local variables. */
     unsigned char rotation = 0, x = 0, y = 0;
-    
-    draw_progress_bar(3, RED);
-    //glcdDrawRectangle(0, 1, 0, GLCD_SIZE_VERT, RED);
+    print_glcd_screen(5, RED,"is it centered?");
     while(1){}
     
 //    /* Main loop. */
