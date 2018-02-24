@@ -23,6 +23,7 @@
 #include "ui_functions.h"
 #include "information_organization.h"
 #include "io_control.h"
+#include "GLCD_PIC.h"
 
 #include "tests.h"
 
@@ -175,7 +176,7 @@ void main(void){
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
     ////
-    test_stepper_motor_control();
+    test_glcd();
     ////
     setup_main_screen(); 
     while (current < 6) {
