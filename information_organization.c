@@ -222,3 +222,22 @@ void decrement_remaining_pill_list(char* prescrip_list, char* was_dispensed_list
         }
     }
 }
+
+void update_leftover_count(char* dispensed_list, char* leftover_list, char sizeof_lists) {
+    int i;
+    for(i=0; i<sizeof_lists; i++) {
+        leftover_list[i] += dispensed_list[i];
+    }
+}
+
+void update_consecutive_no_drop(char* dispensed_list, char* no_drop_list, char sizeof_lists) {
+    int i;
+    for(i=0; i<sizeof_lists; i++) {
+        if (dispensed_list[i]) {
+            no_drop_list[i] += 0;
+        }
+        else {
+            no_drop_list[i] += 1;
+        }
+    }
+}

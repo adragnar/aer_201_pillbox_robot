@@ -178,7 +178,7 @@ void main(void){
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
     ////
-    //test_glcd();
+    //test_read_reset_sensor();
     ////
     setup_main_screen(); 
     while (current < 6) {
@@ -234,16 +234,18 @@ void main(void){
     //while(1){}
     
     //Testing populate master list 
-    printf("%d,%d,%d", master_list[1][0], master_list[1][1], master_list[1][2]);
-    printf("%d,%d,%d", master_list[2][0], master_list[2][1], master_list[2][2]);
+//    printf("%d,%d,%d", master_list[0][0], master_list[0][1], master_list[0][2]);
+//    printf("%d,%d,%d", master_list[1][0], master_list[1][1], master_list[1][2]);
+//    __lcd_newline();
+//    printf("%d,%d,%d", master_list[2][0], master_list[2][1], master_list[2][2]);
+//    printf("%d,%d,%d", master_list[3][0], master_list[3][1], master_list[3][2]);
     ////////////////////
     
     //Step 2 The dispensing cycle 
     TRISB = 0x40;
     enable_stepper(RACK, PORTB, 1, stepper_shift_list); //turn on and bring stepper to starting point
     //while(1){}
-    char was_dispensed_list[3] = {0,0,0};
-    int i, j; 
+    int i; 
     for(i=0; i<14; i=i+2) {  //day based dispense loop
         stepper_motor_control(RACK, PORTB, 1, FORWARD_STEPPER, stepper_shift_list);  //shift box forward
         //while(1){}
@@ -254,9 +256,34 @@ void main(void){
         dispense_pills(master_list[i+1], dc_shift_list, sensor_shift_list);  //dispense all pills for 2nd compartment
         solenoid_control(SOL_TIME, PORTA, 0, sol_shift_list);  //return solenoid home
     }
-    while(1){}
-    //STEP 3 THE CLOSING CYCLE
+    //while(1){}
     
+    //STEP 3 THE CLOSING CYCLE
+    solenoid_control(SOL_TUBE_SWITCH, PORTA, 1, sol_shift_list);  //Switch to tube resevoir dispensing
+    char was_dispensed_list[3]; //WERE PILLS DISPENSED ON LAST CYCLE
+    char consec_no_drop[3] = {0,0,0};  //HOW MANY IN A ROW NOT DROPPRED FOR ALL PILLS
+    //TURN ON CASE FEEDERS and WAIT
+    dc_motor_control(CASEA, PORTA, 1, dc_shift_list);
+    dc_motor_control(CASEB, PORTA, 1, dc_shift_list);
+    dc_motor_control(CASEC, PORTA, 1, dc_shift_list);  
+    __delay_ms(PILL_REV_TIME_FIRST); 
+    //while(1){}
+    while ((consec_no_drop[0] < FINISHED_NUM) || (consec_no_drop[1] < FINISHED_NUM)
+            || (consec_no_drop[2] < FINISHED_NUM)) {  //WHILE SITLL PILLS IN RESEVOIRS 
+        
+        was_dispensed_list[0] = read_reset_sensor(BREAK1, PORTB, sensor_shift_list);
+        was_dispensed_list[1] = read_reset_sensor(BREAK2, PORTC, sensor_shift_list);
+        was_dispensed_list[2] = read_reset_sensor(BREAK3, PORTE, sensor_shift_list);
+        update_leftover_count(was_dispensed_list, leftover_pills, 3);
+        update_consecutive_no_drop(was_dispensed_list, consec_no_drop, 3);
+        //close_box_step(closing_op_num); 
+        __delay_ms(PILL_REV_TIME);
+    }
+    ///TEST CLOSING CYCLE 
+    printf("%d,%d,%d:", consec_no_drop[0], consec_no_drop[1], consec_no_drop[2]);
+    printf("%d,%d,%d", leftover_pills[0], leftover_pills[1], leftover_pills[2]);
+    while(1){}
+    ////////////////////
     //////////////////////////////
     __delay_ms(2000);
     read_time(final_time_array);

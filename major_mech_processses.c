@@ -28,4 +28,3 @@ void dispense_pills(char* master_prescription, char* dc_motor_shift_list, char* 
             //__delay_ms(5000);
         }   
 }   
-        

@@ -61,7 +61,8 @@ char read_reset_sensor(char sensor_name, char curr_state, char sensor_shift_list
     //Write to sensor reset (pulse MSB)
     char old_curr_state = curr_state;
     curr_state = curr_state | (0x2 << sensor_shift_list[sensor_name]);  //set the reset bit high
-    __delay_us(SENSOR_HOLD_TIME); 
+    assign_to_latx(SENSOR, sensor_name, curr_state);
+    __delay_ms(SENSOR_HOLD_TIME); 
 //    printf("%x", curr_state);
     curr_state = old_curr_state; 
     assign_to_latx(SENSOR, sensor_name, curr_state);

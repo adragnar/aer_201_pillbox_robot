@@ -16,6 +16,7 @@ char master_list[14][3] = {{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,
 
 //Global data structures - machine discovered 
 char leftover_pills[3] = {0,0,0};  //leftover resevoir pills counted by machine. R,F,L order
+char closing_op_num = 0;
 
 //enums for easy access 
 //These are for easy access to labels during the UI printing 

@@ -27,7 +27,9 @@ extern char weekly_repeat;  //enum everyday, alternate sunday, alternate monday
 extern char master_list[14][3];  //main list, used in dispensing
 
 //Global data structures - machine discovered 
+#define FINISHED_NUM 5
 extern char leftover_pills[3];  //leftover resevoir pills counted by machine. R,F,L order
+extern char closing_op_num;
 
 //enums for easy access 
 //These are for easy access to labels during the UI printing 
@@ -71,7 +73,7 @@ enum latx_types {DC_MOTOR,SENSOR,SOLENOID,STEPPER};
 //Sensors
 enum sensor_names {COLOR_SENSOR, BREAK1, BREAK2, BREAK3};
 extern char sensor_shift_list[4]; //indexed by above enum values 
-#define SENSOR_HOLD_TIME 1
+#define SENSOR_HOLD_TIME 1000
 
 //EEPROM
 #define NUM_ENTRIES_LOG 1
