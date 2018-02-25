@@ -43,15 +43,15 @@ void assign_to_latx(char latx, char dev_name, char pin_to_write) {
 //            printf("0");
             switch(dev_name){
                 case SOL_TIME : 
-                    LATE = pin_to_write;
+                    LATA = pin_to_write;
                     break;
                 
                 case SOL_TUBE_SWITCH : 
-                    LATE = pin_to_write;
+                    LATA = pin_to_write;
                     break;
                 
                 case SOL_CLOSE_BOX : 
-                    LATE = pin_to_write;
+                    LATA = pin_to_write;
                     break;
                
             }

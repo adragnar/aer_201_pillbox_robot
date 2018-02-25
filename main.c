@@ -238,13 +238,18 @@ void main(void){
     //while(1){}
     char was_dispensed_list[3] = {0,0,0};
     int i, j; 
-    for(i=0; i<7; i=2*i) {  //day based dispense loop
+    for(i=0; i<14; i=i+2) {  //day based dispense loop
         stepper_motor_control(RACK, PORTB, 1, FORWARD_STEPPER, stepper_shift_list);  //shift box forward
         //while(1){}
-        test_dispense_pills();
-        //dispense_pills(master_list, dc_shift_list, stepper_shift_list);
+        __delay_ms(1000);
+        //dispense_pills(master_list[i], dc_shift_list, sensor_shift_list); //dispense all pills for first compartment
+        solenoid_control(SOL_TIME, PORTA, 1, sol_shift_list);  //shift to other time
+        __delay_ms(1000);
+        //dispense_pills(master_list[i+1], dc_shift_list, sensor_shift_list);  //dispense all pills for 2nd compartment
+        solenoid_control(SOL_TIME, PORTA, 0, sol_shift_list);  //return solenoid home
     }
-
+    while(1){}
+    //STEP 3 THE CLOSING CYCLE
     
     //////////////////////////////
     __delay_ms(2000);

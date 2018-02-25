@@ -23,7 +23,7 @@ const char daily_options[3][10] = {"Morning", "Afternoon", "Both"};
 const char weekly_options[3][16] = {"Everyday", "Alt Start Sunday","Alt Start Monday"};
 
 //Solenoids 
-char sol_shift_list[NUM_SOLEN] = {0,0,0}; //Position of each solenoid pin
+char sol_shift_list[NUM_SOLEN] = {0,1,2}; //Position of each solenoid pin
 
 //DC MOTORS 
 char dc_shift_list[NUM_DC_MOTORS] = {3,4,5}; //Position of each motor pin RA3-5

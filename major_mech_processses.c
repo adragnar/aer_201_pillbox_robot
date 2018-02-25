@@ -24,8 +24,8 @@ void dispense_pills(char* master_prescription, char* dc_motor_shift_list, char* 
             was_dispensed_list[1] = read_reset_sensor(BREAK2, PORTC, sensor_shift_list);
             was_dispensed_list[2] = read_reset_sensor(BREAK3, PORTE, sensor_shift_list);
             decrement_remaining_pill_list(prescrip_x, was_dispensed_list, 3);
-            printf("%d,%d,%d", prescrip_x[0], prescrip_x[1], prescrip_x[2]);  
-            __delay_ms(5000);
+            //printf("%d,%d,%d", prescrip_x[0], prescrip_x[1], prescrip_x[2]);  
+            //__delay_ms(5000);
         }   
 }   
         
