@@ -26,6 +26,7 @@ extern "C" {
     
 void dispense_pills(char* master_prescription, char* dc_motor_shift_list, 
         char* stepper_shift_list);
+void close_box(char close_op_num);
 
 
 #ifdef	__cplusplus

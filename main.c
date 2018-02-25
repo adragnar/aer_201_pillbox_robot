@@ -246,7 +246,7 @@ void main(void){
     enable_stepper(RACK, PORTB, 1, stepper_shift_list); //turn on and bring stepper to starting point
     //while(1){}
     int i; 
-    for(i=0; i<14; i=i+2) {  //day based dispense loop
+    for(i=0; i<4; i=i+2) {  //day based dispense loop
         stepper_motor_control(RACK, PORTB, 1, FORWARD_STEPPER, stepper_shift_list);  //shift box forward
         //while(1){}
         __delay_ms(1000);
@@ -274,16 +274,36 @@ void main(void){
         was_dispensed_list[0] = read_reset_sensor(BREAK1, PORTB, sensor_shift_list);
         was_dispensed_list[1] = read_reset_sensor(BREAK2, PORTC, sensor_shift_list);
         was_dispensed_list[2] = read_reset_sensor(BREAK3, PORTE, sensor_shift_list);
-        update_leftover_count(was_dispensed_list, leftover_pills, 3);
-        update_consecutive_no_drop(was_dispensed_list, consec_no_drop, 3);
-        //close_box_step(closing_op_num); 
+        update_leftover_count(was_dispensed_list, leftover_pills, 3);  //increment # leftoverpills
+        update_consecutive_no_drop(was_dispensed_list, consec_no_drop, 3);  //increment for whether done yet
+        if (closing_op_num < NUM_CLOSING_OPS){ //deal with closing box step-by-step
+            close_box(closing_op_num); 
+            closing_op_num += 1;   
+        }
         __delay_ms(PILL_REV_TIME);
     }
+    //close all case feeders + solenoids
+    dc_motor_control(CASEA, PORTA, 0, dc_shift_list);
+    dc_motor_control(CASEB, PORTA, 0, dc_shift_list);
+    dc_motor_control(CASEC, PORTA, 0, dc_shift_list);
+    solenoid_control(SOL_TUBE_SWITCH, PORTA, 0, sol_shift_list);
+    
     ///TEST CLOSING CYCLE 
-    printf("%d,%d,%d:", consec_no_drop[0], consec_no_drop[1], consec_no_drop[2]);
-    printf("%d,%d,%d", leftover_pills[0], leftover_pills[1], leftover_pills[2]);
-    while(1){}
+//    printf("%d,%d,%d:", consec_no_drop[0], consec_no_drop[1], consec_no_drop[2]);
+//    printf("%d,%d,%d", leftover_pills[0], leftover_pills[1], leftover_pills[2]);
+//    while(1){}
     ////////////////////
+    
+    //Stage 4: Finish emptying pills if resevoirs are fast 
+    //printf("%d",closing_op_num);
+    while (closing_op_num < 21) {
+        close_box(closing_op_num); 
+        __delay_ms(1000);
+        closing_op_num += 1;
+    }
+    enable_stepper(RACK, PORTB, 0, stepper_shift_list);
+    while(1){}
+    
     //////////////////////////////
     __delay_ms(2000);
     read_time(final_time_array);

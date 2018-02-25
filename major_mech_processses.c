@@ -28,3 +28,20 @@ void dispense_pills(char* master_prescription, char* dc_motor_shift_list, char* 
             //__delay_ms(5000);
         }   
 }   
+
+void close_box(char close_op_num) {
+    switch(close_op_num%3) {
+        case STEP_BACK : 
+            stepper_motor_control(RACK, PORTB, 1, BACKWARD_STEPPER, stepper_shift_list);
+            break;
+        
+        case CLOSE_LID_CLOSE :
+            solenoid_control(SOL_CLOSE_BOX, PORTA, 1, sol_shift_list);
+            break;
+               
+        case CLOSE_LID_OPEN :
+            solenoid_control(SOL_CLOSE_BOX, PORTA, 0, sol_shift_list);
+            printf("0");
+            break;
+    }
+}
