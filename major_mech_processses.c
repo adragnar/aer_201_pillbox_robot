@@ -41,7 +41,7 @@ void close_box(char close_op_num) {
                
         case CLOSE_LID_OPEN :
             solenoid_control(SOL_CLOSE_BOX, PORTA, 0, sol_shift_list);
-            printf("0");
+            //printf("0");
             break;
     }
 }

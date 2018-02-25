@@ -29,6 +29,7 @@ extern char master_list[14][3];  //main list, used in dispensing
 //Global data structures - machine discovered 
 #define FINISHED_NUM 5
 extern char leftover_pills[3];  //leftover resevoir pills counted by machine. R,F,L order
+extern char in_operation; 
 
 //enums for easy access 
 //These are for easy access to labels during the UI printing 
@@ -78,6 +79,7 @@ extern char sensor_shift_list[4]; //indexed by above enum values
 enum close_box_operations{STEP_BACK, CLOSE_LID_CLOSE, CLOSE_LID_OPEN};
 extern char closing_op_num;
 #define NUM_CLOSING_OPS 21
+
 //EEPROM
 #define NUM_ENTRIES_LOG 1
 

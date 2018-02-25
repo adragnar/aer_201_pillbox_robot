@@ -15,6 +15,7 @@ char master_list[14][3] = {{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,
                             {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}};  //main list, used in dispensing
 
 //Global data structures - machine discovered 
+char in_operation = 0;
 char leftover_pills[3] = {0,0,0};  //leftover resevoir pills counted by machine. R,F,L order
 char closing_op_num = 0;
 

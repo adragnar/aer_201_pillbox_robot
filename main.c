@@ -43,6 +43,11 @@ void interrupt interruptHandler(void){
     
     if(INT1IF){
         /* Interrupt on change handler for RB1. */
+        //Emergency Reset function
+        if (in_operation) {
+            INT1IF = 0;
+            Reset();
+        }
         
         //Interrupt handling for initial UI
         unsigned char keypress = (PORTB & 0xF0) >> 4;
@@ -220,10 +225,12 @@ void main(void){
     standby_screen(); 
     
     //Read from RTC 
-    I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock  
-    di(); // Disable all interrupts  
+    I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock   
     read_time(start_time_array);
-    //////////////// Microcontroler Operation
+    TRISB = 0x42;  //set input pin for sensor on B, keypad interrupt
+    in_operation = 1;
+    
+    //////////////// Machine Operation
     //Step 1: Data structures 
     populate_master_list(master_list, prescription, daily_repeat,weekly_repeat);  //setup internal structure
     char orient_val = read_reset_sensor(COLOR_SENSOR, PORTA, sensor_shift_list);  //read sensor value and reset colour sensor
@@ -242,11 +249,10 @@ void main(void){
     ////////////////////
     
     //Step 2 The dispensing cycle 
-    TRISB = 0x40;
     enable_stepper(RACK, PORTB, 1, stepper_shift_list); //turn on and bring stepper to starting point
     //while(1){}
     int i; 
-    for(i=0; i<4; i=i+2) {  //day based dispense loop
+    for(i=0; i<14; i=i+2) {  //day based dispense loop
         stepper_motor_control(RACK, PORTB, 1, FORWARD_STEPPER, stepper_shift_list);  //shift box forward
         //while(1){}
         __delay_ms(1000);
@@ -304,12 +310,13 @@ void main(void){
     enable_stepper(RACK, PORTB, 0, stepper_shift_list);
     while(1){}
     
-    //////////////////////////////
-    __delay_ms(2000);
+    //Stage 5: End Final Results 
     read_time(final_time_array);
-    ei(); //enable all interrupts
-    /////////////////////////////////
+    in_operation = 0;
 
+    //Data processing; 
+    
+    //UI SETUP
     current = 7;
     while (1) {  // while loop to run final UI 
         switch(current) {
