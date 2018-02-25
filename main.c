@@ -232,6 +232,12 @@ void main(void){
         //printf("reverse");
     }
     //while(1){}
+    
+    //Testing populate master list 
+    printf("%d,%d,%d", master_list[1][0], master_list[1][1], master_list[1][2]);
+    printf("%d,%d,%d", master_list[2][0], master_list[2][1], master_list[2][2]);
+    ////////////////////
+    
     //Step 2 The dispensing cycle 
     TRISB = 0x40;
     enable_stepper(RACK, PORTB, 1, stepper_shift_list); //turn on and bring stepper to starting point
@@ -242,10 +248,10 @@ void main(void){
         stepper_motor_control(RACK, PORTB, 1, FORWARD_STEPPER, stepper_shift_list);  //shift box forward
         //while(1){}
         __delay_ms(1000);
-        //dispense_pills(master_list[i], dc_shift_list, sensor_shift_list); //dispense all pills for first compartment
+        dispense_pills(master_list[i], dc_shift_list, sensor_shift_list); //dispense all pills for first compartment
         solenoid_control(SOL_TIME, PORTA, 1, sol_shift_list);  //shift to other time
         __delay_ms(1000);
-        //dispense_pills(master_list[i+1], dc_shift_list, sensor_shift_list);  //dispense all pills for 2nd compartment
+        dispense_pills(master_list[i+1], dc_shift_list, sensor_shift_list);  //dispense all pills for 2nd compartment
         solenoid_control(SOL_TIME, PORTA, 0, sol_shift_list);  //return solenoid home
     }
     while(1){}

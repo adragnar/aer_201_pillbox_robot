@@ -103,7 +103,9 @@ void populate_master_list (char master_list[14][3], char* prescrip_list, char da
                         }   
                     }
                     break;
-            }   
+                } 
+            break;
+            
         case ALT_SUNDAY:   
             switch(daily) {
                 case MORNING: 
@@ -136,6 +138,7 @@ void populate_master_list (char master_list[14][3], char* prescrip_list, char da
                     }
                     break;
                 }
+            break;
         
         case ALT_MONDAY:
              switch(daily) {
@@ -169,7 +172,7 @@ void populate_master_list (char master_list[14][3], char* prescrip_list, char da
                     }
                     break;
                 }         
-            
+             break;
             
         }      
     }
