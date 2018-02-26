@@ -38,8 +38,8 @@ char stepper_shift_list[NUM_STEPPERS] = {2};  //Position of least significant mo
 double time_from_timer0 = 0;  //global variable containing time from timer0
 
 //RTC
-char start_time_array[3]; 
-char final_time_array[3];
+char start_time_array[6]; 
+char final_time_array[6];
 
 //Sensors 
 char sensor_shift_list[4] = {6,6,6,0}; //positions of each sensor pins LSB: RA6-7,RB6-7,RD6-7,RE0-1

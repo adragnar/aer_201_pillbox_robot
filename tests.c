@@ -164,3 +164,15 @@ void test_dispense_pills(void) {
     dispense_pills(test_prescrip_list, dc_shift_list, stepper_shift_list);
     while(1){}
 }
+
+void test_print_time_to_lcd(void) {
+    __lcd_clear();
+    __lcd_home();
+   
+    char a[6];
+    I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock  
+    while (1) {
+        print_time_to_lcd(a);
+        __delay_ms(1000);
+    }
+}

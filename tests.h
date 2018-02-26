@@ -37,6 +37,7 @@ void test_eeprom(void);
 void test_stepper_motor_control(void);
 void test_glcd(void);
 void test_dispense_pills(void);
+void test_print_time_to_lcd(void);
 
 
 #ifdef	__cplusplus

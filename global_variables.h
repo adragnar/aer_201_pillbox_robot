@@ -48,8 +48,8 @@ enum weekly_options_values {EVERYDAY, ALT_SUNDAY, ALT_MONDAY};
 extern double time_from_timer0;  //global variable containing time from timer0
 
 //RTC
-extern char start_time_array[3]; 
-extern char final_time_array[3];
+extern char start_time_array[6]; 
+extern char final_time_array[6];
 
 //Solenoids
 #define NUM_SOLEN 3
@@ -66,7 +66,7 @@ extern char dc_shift_list[NUM_DC_MOTORS];
 #define STEPPER_ACTUATE_TIME 500  //ms
 enum stepper_motor_names {RACK};
 extern char stepper_shift_list[NUM_STEPPERS];
-enum stepper_direction {FORWARD_STEPPER, BACKWARD_STEPPER}
+enum stepper_direction {FORWARD_STEPPER, BACKWARD_STEPPER};
 
 enum latx_types {DC_MOTOR,SENSOR,SOLENOID,STEPPER};
 

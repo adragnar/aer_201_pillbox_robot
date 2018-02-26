@@ -182,12 +182,11 @@ void main(void){
     
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
-     
+
+    ////
+    test_print_time_to_lcd();
+    ////
     increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
-    
-    ////
-    //test_read_reset_sensor();
-    ////
     setup_main_screen(); 
     while (current < 6) {
         switch(current) {
@@ -327,10 +326,10 @@ void main(void){
     enable_stepper(RACK, PORTB, 0, stepper_shift_list);
     
     //Stage 5: End Final Results 
-    printf("hi");
+    //printf("hi");
     I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock   
     read_time(final_time_array);
-    printf("hi");
+    //printf("hi");
     in_operation = 0;
     increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
     //Data processing; 
