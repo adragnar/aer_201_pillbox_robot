@@ -399,7 +399,15 @@ void print_glcd_screen(char next_state, char colour, char* op_name) {
     glcdDrawRectangle(0, GLCD_SIZE_HORZ, 0, GLCD_SIZE_VERT, WHITE);
     draw_progress_bar(next_state, RED);    
     char centred_text[128] = {}; //new big array to hold the text 
-    centre_glcd_text(op_name, centred_text);  //move centred text into big array prevent overflow
+    
+    //line up the text with margin
+    int i;
+    for (i=0; i<GLCD_MARGIN; i++) {
+        strcat(centred_text, " ");
+    }
+    strcat(centred_text, op_name);
+    //centre_glcd_text(op_name, centred_text);  //move centred text into big array prevent overflow
+    
     print_px_string(0, 68, centred_text);
 }
 
