@@ -51,11 +51,12 @@ char find_operation_time(char initial[6], char final[6]) {
     return elapsed_time;  
 }  
 
-void print_time_to_lcd(char write_list[6]) {  //modifies input list 
+void print_time_to_lcd(char write_list[6]) {  //modifies input list     
+    I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock  
     read_time(write_list);
     __lcd_home();
     printf("%02x/%02x/%02x", write_list[5],write_list[4],write_list[3]); // Print date in YY/MM/DD
     __lcd_newline();
     printf("%02x:%02x:%02x", write_list[2],write_list[1],write_list[0]); // HH:MM:SS
-    __delay_us(RTC_DELAY);
+    __delay_ms(RTC_DELAY);
 }

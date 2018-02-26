@@ -22,6 +22,7 @@ extern "C" {
 #include "ui_functions.h"
 #include "information_organization.h"
 #include "io_control.h"
+#include "rtc.h"
     
     
 void dispense_pills(char* master_prescription, char* dc_motor_shift_list, 

@@ -184,7 +184,7 @@ void main(void){
     ei(); // Enable all interrupts
 
     ////
-    test_print_time_to_lcd();
+    //test_print_time_to_lcd();
     ////
     increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
     setup_main_screen(); 
@@ -224,11 +224,11 @@ void main(void){
                 
         }
     }
-    standby_screen(); 
     
     //Read from RTC 
-    I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock   
-    read_time(start_time_array);
+    __lcd_clear();
+    __lcd_home();
+    print_time_to_lcd(start_time_array);
     TRISB = 0x42;  //set input pin for sensor on B, keypad interrupt
     in_operation = 1;
     
@@ -237,9 +237,11 @@ void main(void){
     increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
     //print_glcd_screen(1, RED, op_names[1]);
     populate_master_list(master_list, prescription, daily_repeat,weekly_repeat);  //setup internal structure
+    print_time_to_lcd(final_time_array);
     char orient_val = read_reset_sensor(COLOR_SENSOR, PORTA, sensor_shift_list);  //read sensor value and reset colour sensor
     if (orient_val) {  //orient_val = 0, blue. =1, pink
         reverse_master_list(master_list);  //reverse list if needed 
+        print_time_to_lcd(final_time_array);
         //printf("reverse");
     }
     //while(1){}
@@ -254,23 +256,29 @@ void main(void){
     
     //Step 2 The dispensing cycle 
     enable_stepper(RACK, PORTB, 1, stepper_shift_list); //turn on and bring stepper to starting point
+    print_time_to_lcd(final_time_array);
     //while(1){}
     int i; 
     for(i=0; i<14; i=i+2) {  //day based dispense loop
         increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
+        print_time_to_lcd(final_time_array);
         stepper_motor_control(RACK, PORTB, 1, FORWARD_STEPPER, stepper_shift_list);  //shift box forward
+        print_time_to_lcd(final_time_array);
         //while(1){}
         __delay_ms(1000);
         dispense_pills(master_list[i], dc_shift_list, sensor_shift_list); //dispense all pills for first compartment
         solenoid_control(SOL_TIME, PORTA, 1, sol_shift_list);  //shift to other time
+        print_time_to_lcd(final_time_array);
         __delay_ms(1000);
         dispense_pills(master_list[i+1], dc_shift_list, sensor_shift_list);  //dispense all pills for 2nd compartment
         solenoid_control(SOL_TIME, PORTA, 0, sol_shift_list);  //return solenoid home
+        print_time_to_lcd(final_time_array);
     }
     //while(1){}
     
     //STEP 3 THE CLOSING CYCLE
     solenoid_control(SOL_TUBE_SWITCH, PORTA, 1, sol_shift_list);  //Switch to tube resevoir dispensing
+    print_time_to_lcd(final_time_array);
     increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
     
     char was_dispensed_list[3]; //WERE PILLS DISPENSED ON LAST CYCLE
@@ -278,34 +286,47 @@ void main(void){
     //TURN ON CASE FEEDERS and WAIT
     dc_motor_control(CASEA, PORTA, 1, dc_shift_list);
     dc_motor_control(CASEB, PORTA, 1, dc_shift_list);
-    dc_motor_control(CASEC, PORTA, 1, dc_shift_list);  
+    dc_motor_control(CASEC, PORTA, 1, dc_shift_list);
+    print_time_to_lcd(final_time_array);
     __delay_ms(PILL_REV_TIME_FIRST); 
+    print_time_to_lcd(final_time_array);
     //while(1){}
     while ((consec_no_drop[0] < FINISHED_NUM) || (consec_no_drop[1] < FINISHED_NUM)
             || (consec_no_drop[2] < FINISHED_NUM)) {  //WHILE SITLL PILLS IN RESEVOIRS 
         
         was_dispensed_list[0] = read_reset_sensor(BREAK1, PORTB, sensor_shift_list);
+        print_time_to_lcd(final_time_array);
         was_dispensed_list[1] = read_reset_sensor(BREAK2, PORTC, sensor_shift_list);
+        print_time_to_lcd(final_time_array);
         was_dispensed_list[2] = read_reset_sensor(BREAK3, PORTE, sensor_shift_list);
+        print_time_to_lcd(final_time_array);
         update_leftover_count(was_dispensed_list, leftover_pills, 3);  //increment # leftoverpills
+        print_time_to_lcd(final_time_array);
         update_consecutive_no_drop(was_dispensed_list, consec_no_drop, 3);  //increment for whether done yet
+        print_time_to_lcd(final_time_array);
         if (closing_op_num < NUM_CLOSING_OPS){ //deal with closing box step-by-step
             if(closing_op_num%3 == 0) {
                 increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
             }
             close_box(closing_op_num); 
+            print_time_to_lcd(final_time_array);
             closing_op_num += 1;   
         }
         else {
             print_glcd_screen(&glcd_op_num, RED, "Returning Pills"); //fixed at still dispensing label
         }
         __delay_ms(PILL_REV_TIME);
+        print_time_to_lcd(final_time_array);
     }
     //close all case feeders + solenoids
     dc_motor_control(CASEA, PORTA, 0, dc_shift_list);
+    print_time_to_lcd(final_time_array);
     dc_motor_control(CASEB, PORTA, 0, dc_shift_list);
+    print_time_to_lcd(final_time_array);
     dc_motor_control(CASEC, PORTA, 0, dc_shift_list);
+    print_time_to_lcd(final_time_array);
     solenoid_control(SOL_TUBE_SWITCH, PORTA, 0, sol_shift_list);
+    print_time_to_lcd(final_time_array);
     
     ///TEST CLOSING CYCLE 
 //    printf("%d,%d,%d:", consec_no_drop[0], consec_no_drop[1], consec_no_drop[2]);
@@ -320,10 +341,12 @@ void main(void){
             increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
         }
         close_box(closing_op_num); 
+        print_time_to_lcd(final_time_array);
         //__delay_ms(1000);
         closing_op_num += 1;
     }
     enable_stepper(RACK, PORTB, 0, stepper_shift_list);
+    print_time_to_lcd(final_time_array);
     
     //Stage 5: End Final Results 
     //printf("hi");

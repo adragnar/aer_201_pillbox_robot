@@ -48,7 +48,7 @@ enum weekly_options_values {EVERYDAY, ALT_SUNDAY, ALT_MONDAY};
 extern double time_from_timer0;  //global variable containing time from timer0
 
 //RTC
-#define RTC_DELAY 1000
+#define RTC_DELAY 1
 extern char start_time_array[6]; 
 extern char final_time_array[6];
 
@@ -74,7 +74,7 @@ enum latx_types {DC_MOTOR,SENSOR,SOLENOID,STEPPER};
 //Sensors
 enum sensor_names {COLOR_SENSOR, BREAK1, BREAK2, BREAK3};
 extern char sensor_shift_list[4]; //indexed by above enum values 
-#define SENSOR_HOLD_TIME 1000
+#define SENSOR_HOLD_TIME 100
 
 //Closing 
 enum close_box_operations{STEP_BACK, CLOSE_LID_CLOSE, CLOSE_LID_OPEN};
