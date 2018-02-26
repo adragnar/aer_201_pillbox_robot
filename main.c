@@ -327,6 +327,8 @@ void main(void){
     enable_stepper(RACK, PORTB, 0, stepper_shift_list);
     
     //Stage 5: End Final Results 
+    printf("hi");
+    I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock   
     read_time(final_time_array);
     printf("hi");
     in_operation = 0;

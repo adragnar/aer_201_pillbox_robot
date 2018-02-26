@@ -19,12 +19,12 @@ void read_time(char* a) {  //read the RTC to find out what time it is
     /* Declare local variables. */  
     unsigned char time[7]; // Create a byte array to hold time read from RTC  
     unsigned char i; // Loop counter  
-      
+    printf("t1");  
     I2C_Master_Start(); // Start condition  
     I2C_Master_Write(0b11010000); // 7 bit RTC address + Write  
     I2C_Master_Write(0x00); // Set memory pointer to seconds  
     I2C_Master_Stop(); // Stop condition  
-
+    printf("t2"); 
     /* Read current time. */  
     I2C_Master_Start(); // Start condition  
     I2C_Master_Write(0b11010001); // 7 bit RTC address + Read  
@@ -33,7 +33,7 @@ void read_time(char* a) {  //read the RTC to find out what time it is
     }  
     time[6] = I2C_Master_Read(NACK); // Final Read with NACK  
     I2C_Master_Stop(); // Stop condition       
-    
+     printf("t4"); 
     a[0] = time[0];
     a[1] = time[1];
     a[2] = time[2];
