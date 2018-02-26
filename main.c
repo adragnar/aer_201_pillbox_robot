@@ -182,6 +182,9 @@ void main(void){
     
     INT1IE = 1; // Enable RB1 (keypad data available) interrupt
     ei(); // Enable all interrupts
+     
+    increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
+    
     ////
     //test_read_reset_sensor();
     ////
@@ -232,6 +235,8 @@ void main(void){
     
     //////////////// Machine Operation
     //Step 1: Data structures 
+    increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
+    //print_glcd_screen(1, RED, op_names[1]);
     populate_master_list(master_list, prescription, daily_repeat,weekly_repeat);  //setup internal structure
     char orient_val = read_reset_sensor(COLOR_SENSOR, PORTA, sensor_shift_list);  //read sensor value and reset colour sensor
     if (orient_val) {  //orient_val = 0, blue. =1, pink
@@ -253,6 +258,7 @@ void main(void){
     //while(1){}
     int i; 
     for(i=0; i<14; i=i+2) {  //day based dispense loop
+        increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
         stepper_motor_control(RACK, PORTB, 1, FORWARD_STEPPER, stepper_shift_list);  //shift box forward
         //while(1){}
         __delay_ms(1000);
@@ -266,6 +272,8 @@ void main(void){
     
     //STEP 3 THE CLOSING CYCLE
     solenoid_control(SOL_TUBE_SWITCH, PORTA, 1, sol_shift_list);  //Switch to tube resevoir dispensing
+    increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
+    
     char was_dispensed_list[3]; //WERE PILLS DISPENSED ON LAST CYCLE
     char consec_no_drop[3] = {0,0,0};  //HOW MANY IN A ROW NOT DROPPRED FOR ALL PILLS
     //TURN ON CASE FEEDERS and WAIT
@@ -283,8 +291,14 @@ void main(void){
         update_leftover_count(was_dispensed_list, leftover_pills, 3);  //increment # leftoverpills
         update_consecutive_no_drop(was_dispensed_list, consec_no_drop, 3);  //increment for whether done yet
         if (closing_op_num < NUM_CLOSING_OPS){ //deal with closing box step-by-step
+            if(closing_op_num%3 == 0) {
+                increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
+            }
             close_box(closing_op_num); 
             closing_op_num += 1;   
+        }
+        else {
+            print_glcd_screen(&glcd_op_num, RED, "Returning Pills"); //fixed at still dispensing label
         }
         __delay_ms(PILL_REV_TIME);
     }
@@ -303,17 +317,20 @@ void main(void){
     //Stage 4: Finish emptying pills if resevoirs are fast 
     //printf("%d",closing_op_num);
     while (closing_op_num < 21) {
+        if(closing_op_num%3 == 0) {
+            increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
+        }
         close_box(closing_op_num); 
-        __delay_ms(1000);
+        //__delay_ms(1000);
         closing_op_num += 1;
     }
     enable_stepper(RACK, PORTB, 0, stepper_shift_list);
-    while(1){}
     
     //Stage 5: End Final Results 
     read_time(final_time_array);
+    printf("hi");
     in_operation = 0;
-
+    increment_glcd_screen(&glcd_op_num, RED, op_names[glcd_op_num]);
     //Data processing; 
     
     //UI SETUP

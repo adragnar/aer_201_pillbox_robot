@@ -207,5 +207,6 @@ void initGLCD(void);
 //My GLCD Functions
 void draw_progress_bar(char next_state, unsigned long colour);
 void print_glcd_screen(char next_state, char colour, char* op_name);
+void increment_glcd_screen(char* next_state, char colour, char* op_name);
 
 #endif	/* GLCD_PIC_H */

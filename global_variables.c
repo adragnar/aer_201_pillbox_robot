@@ -45,5 +45,8 @@ char final_time_array[3];
 char sensor_shift_list[4] = {6,6,6,0}; //positions of each sensor pins LSB: RA6-7,RB6-7,RD6-7,RE0-1
 
 //GLCD 
-const char op_names[NUM_DISPLAYED_DIVISIONS][32] = {"User Input", "Check Box Orientation", 
-                  "Dispensing Pills", "Closing Lids", "Returning Pills", "Operation Complete"}; 
+char glcd_op_num = 0;
+const char op_names[NUM_DIVISIONS][32] = {"User Input", "Check Orientation", 
+"Dispensing Pills", "Dispensing Pills", "Dispensing Pills", "Dispensing Pills", "Dispensing Pills", 
+"Dispensing Pills", "Dispensing Pills", "Start Pill Return", "Closing Lids", "Closing Lids", "Closing Lids",
+"Closing Lids", "Closing Lids", "Closing Lids", "Closing Lids", "Operation Complete"}; 

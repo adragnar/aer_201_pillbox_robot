@@ -84,12 +84,12 @@ extern char closing_op_num;
 #define NUM_ENTRIES_LOG 1
 
 //GLCD 
-#define NUM_DIVISIONS 17 
-#define NUM_DISPLAYED_DIVISIONS 6
+#define NUM_DIVISIONS 18 
 #define GLCD_MARGIN 5
-enum op_states {USER_INPUT, CHECK_DIR, DISP1, DISP2, DISP3, DISP4, DISP5, DISP6, DISP7,
+enum op_states {USER_INPUT, CHECK_DIR, DISP1, DISP2, DISP3, DISP4, DISP5, DISP6, DISP7, START_DISP,
                     CLOSE1, CLOSE2, CLOSE3, CLOSE4, CLOSE5, CLOSE6, CLOSE7, FINISH};
-extern const char op_names[NUM_DISPLAYED_DIVISIONS][32]; 
+extern const char op_names[NUM_DIVISIONS][32]; 
+extern char glcd_op_num;
                     
                     
                     

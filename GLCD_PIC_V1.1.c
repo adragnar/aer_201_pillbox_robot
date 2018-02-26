@@ -381,23 +381,29 @@ void draw_progress_bar(char next_state, unsigned long colour) {
     
 }
 
-void centre_glcd_text(char* text, char new_array[128]) {
-    int size = strlen(text);
-    char margin = (GLCD_SIZE_HORZ - size)/(2*9);  //divided by 2 for both glcd sides, 3 as estimate of char width*space width
-    //printf("%d",margin);
-    int i;
-    for (i=0; i<margin; i++) {  //Add all the spaces to the new_array string 
-        strcat(new_array, " ");
-    }   
+void centre_glcd_text(char* text, char new_array[128]) {  //currently commenting out the centred part for later
+//    int size = strlen(text);
+//    char margin = (GLCD_SIZE_HORZ - size)/(2*9);  //divided by 2 for both glcd sides, 3 as estimate of char width*space width
+//    //printf("%d",margin);
+//    int i;
+//    for (i=0; i<margin; i++) {  //Add all the spaces to the new_array string 
+//        strcat(new_array, " ");
+//    }   
     strcat(new_array,text);  //Add the original text on top
 }
 
 void print_glcd_screen(char next_state, char colour, char* op_name) {
     /* Initialize GLCD. */
+ 
     initGLCD(); //take this out later   
     glcdDrawRectangle(0, GLCD_SIZE_HORZ, 0, GLCD_SIZE_VERT, WHITE);
     draw_progress_bar(next_state, RED);    
     char centred_text[128] = {}; //new big array to hold the text 
     centre_glcd_text(op_name, centred_text);  //move centred text into big array prevent overflow
     print_px_string(0, 68, centred_text);
+}
+
+void increment_glcd_screen(char* next_state, char colour, char* op_name) {  //input pointer to glcd_op_num
+    print_glcd_screen(*next_state, colour, op_name);
+    *next_state += 1;   
 }
