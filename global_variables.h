@@ -48,6 +48,7 @@ enum weekly_options_values {EVERYDAY, ALT_SUNDAY, ALT_MONDAY};
 extern double time_from_timer0;  //global variable containing time from timer0
 
 //RTC
+#define RTC_DELAY 1000
 extern char start_time_array[6]; 
 extern char final_time_array[6];
 

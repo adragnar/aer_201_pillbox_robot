@@ -173,6 +173,5 @@ void test_print_time_to_lcd(void) {
     I2C_Master_Init(100000); //Initialize I2C Master with 100 kHz clock  
     while (1) {
         print_time_to_lcd(a);
-        __delay_ms(1000);
     }
 }
