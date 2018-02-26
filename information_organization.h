@@ -21,7 +21,11 @@ extern "C" {
 void assign_to_latx(char latx, char dev_name, char pin_to_write);
 void populate_master_list (char master_list[14][3], char* prescrip_list, char daily, char weekly);
 void reverse_master_list(char master_list[14][3]);
-
+void deep_copy(char* copy_list, char* template_list, char sizeof_lists);
+void create_pill_dispense_logic_list(char* prescrip_list, char* logic_list, char sizeof_lists); 
+void decrement_remaining_pill_list(char* prescrip_list, char* was_dispensed_list, char sizeof_lists);
+void update_leftover_count(char* dispensed_list, char* leftover_list, char sizeof_lists);
+void update_consecutive_no_drop(char* dispensed_list, char* no_drop_list, char sizeof_lists);
 
 #ifdef	__cplusplus
 }

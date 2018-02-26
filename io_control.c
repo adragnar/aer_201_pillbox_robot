@@ -20,15 +20,15 @@ void dc_motor_control(char motor_name, char curr_state, char on_off, char dc_shi
 }
 
 void enable_stepper(char motor_name, char curr_state, char on_off, char stepper_shift_list[NUM_STEPPERS]) {
-    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+4));
-    on_off = (on_off << (stepper_shift_list[motor_name]+4));
+    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+3));
+    on_off = (on_off << (stepper_shift_list[motor_name]+3));
     curr_state = curr_state | on_off; 
     assign_to_latx(STEPPER, motor_name, curr_state);
 }
 
 void reset_stepper(char motor_name, char curr_state, char is_reset, char stepper_shift_list[NUM_STEPPERS]) {
-    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+3));
-    is_reset = (is_reset << (stepper_shift_list[motor_name]+3));
+    curr_state = curr_state & ~(0x01 << (stepper_shift_list[motor_name]+2));
+    is_reset = (is_reset << (stepper_shift_list[motor_name]+2));
     curr_state = curr_state | is_reset; 
     assign_to_latx(STEPPER, motor_name, curr_state);
 }
@@ -61,7 +61,8 @@ char read_reset_sensor(char sensor_name, char curr_state, char sensor_shift_list
     //Write to sensor reset (pulse MSB)
     char old_curr_state = curr_state;
     curr_state = curr_state | (0x2 << sensor_shift_list[sensor_name]);  //set the reset bit high
-    __delay_us(SENSOR_HOLD_TIME); 
+    assign_to_latx(SENSOR, sensor_name, curr_state);
+    __delay_ms(SENSOR_HOLD_TIME); 
 //    printf("%x", curr_state);
     curr_state = old_curr_state; 
     assign_to_latx(SENSOR, sensor_name, curr_state);

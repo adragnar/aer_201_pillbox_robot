@@ -19,6 +19,7 @@ extern "C" {
 void read_time(char* a);  
 char find_operation_time(char* initial, char* final);  
 char rtc_test(char* initial, char* final); //to execute test, run with start & final time arrays below setup_main-screen
+void print_time_to_lcd(char* write_list);
 
 #ifdef	__cplusplus
 }

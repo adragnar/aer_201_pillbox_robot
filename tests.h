@@ -25,6 +25,7 @@ extern "C" {
 #include "ui_functions.h"
 #include "GLCD_PIC.h"
 #include "px_ascii.h"
+#include "major_mech_processses.h"
     
 void test_populate_master_list(void);
 void test_reverse_master_list(void);
@@ -35,6 +36,8 @@ void test_read_reset_sensor(void);
 void test_eeprom(void);
 void test_stepper_motor_control(void);
 void test_glcd(void);
+void test_dispense_pills(void);
+void test_print_time_to_lcd(void);
 
 
 #ifdef	__cplusplus

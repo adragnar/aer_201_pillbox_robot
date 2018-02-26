@@ -26,7 +26,15 @@ void assign_to_latx(char latx, char dev_name, char pin_to_write) {
                     break;
                 
                 case BREAK1 : 
-                    LATA = pin_to_write;
+                    LATB = pin_to_write;
+                    break;
+                    
+                case BREAK2 : 
+                    LATD = pin_to_write;
+                    break;
+                
+                case BREAK3 : 
+                    LATE = pin_to_write;
                     break;
             }
             break;
@@ -35,15 +43,15 @@ void assign_to_latx(char latx, char dev_name, char pin_to_write) {
 //            printf("0");
             switch(dev_name){
                 case SOL_TIME : 
-                    LATE = pin_to_write;
+                    LATA = pin_to_write;
                     break;
                 
                 case SOL_TUBE_SWITCH : 
-                    LATE = pin_to_write;
+                    LATA = pin_to_write;
                     break;
                 
                 case SOL_CLOSE_BOX : 
-                    LATE = pin_to_write;
+                    LATA = pin_to_write;
                     break;
                
             }
@@ -95,7 +103,9 @@ void populate_master_list (char master_list[14][3], char* prescrip_list, char da
                         }   
                     }
                     break;
-            }   
+                } 
+            break;
+            
         case ALT_SUNDAY:   
             switch(daily) {
                 case MORNING: 
@@ -128,6 +138,7 @@ void populate_master_list (char master_list[14][3], char* prescrip_list, char da
                     }
                     break;
                 }
+            break;
         
         case ALT_MONDAY:
              switch(daily) {
@@ -161,7 +172,7 @@ void populate_master_list (char master_list[14][3], char* prescrip_list, char da
                     }
                     break;
                 }         
-            
+             break;
             
         }      
     }
@@ -182,6 +193,51 @@ void reverse_master_list(char master_list[14][3]) {
     for (i=0; i<14; i++) {  //swap the values of master list
         for (j=0; j<3; j++) {
             master_list[i][j] = temp[13-i][j];
+        }
+    }
+}
+
+void deep_copy(char* copy_list, char* template_list, char sizeof_lists) {
+    int i;
+    for(i=0; i<sizeof_lists; i++) {
+        copy_list[i] = template_list[i];
+    }
+}
+
+void create_pill_dispense_logic_list(char* prescrip_list, char* logic_list, char sizeof_lists) {
+    int i;
+    for(i=0; i<sizeof_lists; i++) {
+        if (prescrip_list[i] > 0) {
+            logic_list[i] = 1;
+        }
+        else { logic_list[i] = 0; } 
+    }
+}
+
+void decrement_remaining_pill_list(char* prescrip_list, char* was_dispensed_list, char sizeof_lists){
+    int i;
+    for(i=0; i<sizeof_lists; i++) {
+        if (was_dispensed_list[i] > 0) {
+            prescrip_list[i] -= 1;  //Note - later add error tolerance for debugging multiple pills @ once bug
+        }
+    }
+}
+
+void update_leftover_count(char* dispensed_list, char* leftover_list, char sizeof_lists) {
+    int i;
+    for(i=0; i<sizeof_lists; i++) {
+        leftover_list[i] += dispensed_list[i];
+    }
+}
+
+void update_consecutive_no_drop(char* dispensed_list, char* no_drop_list, char sizeof_lists) {
+    int i;
+    for(i=0; i<sizeof_lists; i++) {
+        if (dispensed_list[i]) {
+            no_drop_list[i] += 0;
+        }
+        else {
+            no_drop_list[i] += 1;
         }
     }
 }
